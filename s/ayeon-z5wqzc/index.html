@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>面接トレーニング</title>
+<style>
+:root{
+  --ink:#1f2a44; --muted:#667085; --paper:#f6f3ee; --card:#ffffff; --line:#e7e0d4;
+  --indigo:#2f4a8a; --indigo-d:#22386c; --indigo-l:#e8edf8;
+  --red:#c0392b; --red-l:#fde8e4; --green:#2b7a57; --green-l:#e2f3ea; --amber:#b9770e; --amber-l:#fdf0d8;
+  --radius:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);color-scheme:light;
+  font-family:"Noto Sans JP","Hiragino Sans","Apple SD Gothic Neo","Malgun Gothic","Segoe UI",system-ui,sans-serif;
+  line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:980px;margin:0 auto;padding:20px 16px 60px}
+h1,h2,h3{margin:0;line-height:1.3}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.muted{color:var(--muted)} .small{font-size:13px}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.grow{flex:1}
+.btn{appearance:none;border:1px solid var(--line);background:#fff;color:var(--ink);font:inherit;font-weight:600;
+  padding:10px 18px;border-radius:999px;cursor:pointer;transition:.15s}
+.btn:hover{border-color:var(--indigo)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.primary{background:var(--indigo);border-color:var(--indigo);color:#fff}
+.btn.primary:hover{background:var(--indigo-d)}
+.btn.rec{background:var(--red);border-color:var(--red);color:#fff}
+.btn.big{padding:14px 28px;font-size:17px}
+.btn.ghost{border-color:transparent;color:var(--muted)}
+.badge{display:inline-block;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px}
+.badge.read{background:var(--indigo-l);color:var(--indigo)}
+.badge.memo{background:var(--amber-l);color:var(--amber)}
+.badge.ok{background:var(--green-l);color:var(--green)}
+.badge.ng{background:var(--red-l);color:var(--red)}
+.hero{background:linear-gradient(135deg,#22386c,#3a5aa5);color:#fff;border:none}
+.hero .muted{color:#cfd9f2}
+.hero h1{font-size:24px}
+.dday{background:rgba(255,255,255,.16);border-radius:12px;padding:8px 16px;text-align:center}
+.dday b{font-size:26px;display:block;line-height:1.1}
+.steps{display:grid;grid-template-columns:repeat(10,1fr);gap:8px}
+.step{aspect-ratio:1/1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;
+  border:2px dashed var(--line);color:var(--muted);background:#fff;font-size:15px;max-width:64px;margin:0 auto;width:100%}
+.step.done{border:2px solid var(--green);background:var(--green);color:#fff}
+.step.now{border:2px solid var(--indigo);color:var(--indigo);box-shadow:0 0 0 4px var(--indigo-l)}
+.step-lab{text-align:center;font-size:11px;margin-top:4px;color:var(--muted)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat{background:var(--paper);border-radius:12px;padding:14px;text-align:center}
+.stat b{font-size:24px;display:block}
+.bar{height:8px;background:#ece7dd;border-radius:99px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--indigo);transition:width .3s}
+.qbox{border-left:5px solid var(--indigo);background:var(--indigo-l);border-radius:10px;padding:16px 18px}
+.qbox .q{font-size:22px;font-weight:700}
+.script{font-size:21px;line-height:2;padding:18px;border-radius:12px;background:#fffdf8;border:1px solid var(--line);letter-spacing:.02em}
+.script.hidden{display:none}
+.bad{background:var(--red-l);color:var(--red);border-bottom:2px solid var(--red);border-radius:3px;font-weight:700}
+.live{min-height:56px;padding:12px 16px;border-radius:12px;background:#f2f4f8;color:#475467;font-size:17px;margin:12px 0}
+.recdot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--red);margin-right:6px;animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.25}}
+.ring{width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;
+  background:conic-gradient(var(--c) calc(var(--p)*1%),#ece7dd 0)}
+.ring span{width:74px;height:74px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800}
+.diff{list-style:none;padding:0;margin:8px 0}
+.diff li{padding:8px 12px;border-radius:8px;background:var(--paper);margin-bottom:6px;font-size:16px}
+.tag{font-size:12px;font-weight:700;padding:2px 8px;border-radius:6px;margin-right:8px}
+.tag.miss{background:var(--red-l);color:var(--red)} .tag.sub{background:var(--amber-l);color:var(--amber)} .tag.extra{background:var(--indigo-l);color:var(--indigo)}
+.chip{display:inline-block;background:var(--amber-l);color:var(--amber);padding:4px 12px;border-radius:99px;margin:3px;font-weight:700;font-size:14px}
+.chip.miss{background:var(--red-l);color:var(--red)} .chip.hit{background:var(--green-l);color:var(--green)}
+details{border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:10px;background:#fff}
+summary{cursor:pointer;font-weight:600;list-style:none}
+summary::-webkit-details-marker{display:none}
+textarea,input,select{font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;width:100%;background:#fff;color:var(--ink)}
+label{font-weight:700;display:block;margin:14px 0 6px}
+.notice{background:var(--amber-l);color:#7a4b06;padding:12px 14px;border-radius:10px;font-size:14px}
+.ok-box{background:var(--green-l);color:#1d5a40;padding:12px 14px;border-radius:10px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px 6px;text-align:left;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600}
+.celebrate{text-align:center;padding:32px 20px}
+.celebrate h1{font-size:30px;margin:8px 0 12px}
+.code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:22px;letter-spacing:.12em;background:var(--paper);padding:8px 16px;border-radius:10px;display:inline-block}
+pre.rep{white-space:pre-wrap;background:var(--paper);padding:14px;border-radius:10px;font-size:13px;max-height:340px;overflow:auto;font-family:inherit}
+@media(max-width:560px){.qbox .q{font-size:19px}.script{font-size:18px}.hero h1{font-size:20px}.steps{gap:4px}.step{font-size:12px}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+"use strict";
+const C = {"school": "関西大学 文学部（表象文化専修 志望）", "title": "모의면접 진행 순서 시트 — 선아연 학생", "info": "(↳ = 前の答えから続く質問 / 〈例〉の部分は自分の実際の経験で書き直すこと)", "greeting": "こんにちは！ まず受験番号とお名前をお願いします。", "student": "선아연", "questions": [{"id": 1, "q": "自己紹介をお願いします。", "a": "はじめまして。韓国から参りました、ソン・アヨンと申します。生まれは日本で、8歳まで日本で暮らしていました。最近は、ポスターや映像のような目に見える表現に、その時代の人たちの考え方がどう表れているのかに興味を持っています。関西大学文学部では、表象文化専修で視覚文化について学びたいと思っています。本日はどうぞよろしくお願いいたします。", "type": "normal", "sum": "자기소개", "asum": "한국 출신, 8세까지 일본 거주. 포스터·영상에 드러난 시대의 생각에 관심, 간사이대 표상문화 전수에서 시각문화 공부 희망", "kw": ["ソン・アヨン", "8歳", "視覚文化", "表象文化専修"]}, {"id": 2, "q": "関西大学の文学部を志望した理由を教えてください。", "a": "関西大学の文学部は、入学してすぐに一つの分野に決めるのではなく、1年生のあいだにいろいろな分野の学び方に触れてから、2年生で専修を選べるところが魅力でした。私は今、視覚文化に一番関心がありますが、作品の背景にある歴史や社会のことも一緒に考えたいと思っています。だから、まず幅広く学んでから自分の研究を深めていける今の仕組みが、自分に合っていると感じました。", "type": "normal", "sum": "간사이대 문학부 지망 이유", "asum": "1학년에 여러 분야를 접하고 2학년에 전수를 고르는 구조가 매력. 시각문화+역사·사회를 함께 보고 싶음", "kw": ["1年生", "2年生", "専修", "幅広く"]}, {"id": 3, "q": "それは文学部を選んだ理由ですね。では、学部ではなく、関西大学という大学そのものの魅力は何だと思いますか。", "a": "一つは、キャンパスのある吹田市に、1970年の万博の跡地である万博記念公園があることです。太陽の塔や当時の資料を展示している施設に、実際に足を運んで調べられるのは、私の研究にとって大きいと思いました。それに、関西大学の博物館でも、去年「万博のころをふり返る」という企画展が開かれていたと知りました。万博のころに千里の町や大学がどう変わったのかを振り返る展示で、大学自体が、地域と万博の歴史を大切にしているんだと感じました。もう一つは、「学の実化」という考え方です。学んだことを実際の社会で生かすという意味だと知って、展示の企画をしたい私の目標と重なると思いました。", "type": "normal", "parent": 2, "sum": "(꼬리) 대학 자체의 매력", "asum": "스이타 캠퍼스 근처 만박기념공원, 대학 박물관 만박 기획전, '학의 실화' 정신이 전시 기획 목표와 연결", "kw": ["万博記念公園", "博物館", "学の実化", "企画"]}, {"id": 4, "q": "美術大学やデザイン学部ではなく、なぜ文学部なのですか。", "a": "私がやりたいのは、作品を作ることよりも、作品がなぜその時代にその形で生まれたのかを考えることです。たとえばポスターを見たときも、色や形だけではなく、そこにどんな社会の空気があったのかを知りたいんです。それには美術だけでなく、歴史やメディア、文化の見方も必要なので、人文学の中で幅広く学べる文学部が一番合っていると思いました。", "type": "normal", "sum": "미대·디자인학부가 아닌 이유", "asum": "만드는 것보다 작품이 그 시대에 왜 그 형태로 나왔는지 알고 싶음. 역사·미디어·문화를 아우르는 문학부가 적합", "kw": ["その時代", "社会の空気", "歴史", "文学部"]}, {"id": 5, "q": "表象文化専修に関心を持った理由は何ですか。", "a": "表象文化専修では、美術史だけでなく、映画やメディア、それに文化人類学のような視点からも、人が何かを「表す」ことについて学べると知りました。私が見たいのは一枚の絵ではなくて、ポスターや映像、展示が一緒になって作る一つの時代のイメージなので、いろいろな角度から考えられるこの専修がぴったりだと思いました。", "type": "normal", "sum": "표상문화 전수 관심 이유", "asum": "미술사·영화·미디어·문화인류학 등 여러 각도에서 '표현'을 배움. 포스터·영상·전시가 만드는 시대의 이미지를 보고 싶음", "kw": ["美術史", "映画", "文化人類学", "時代のイメージ"]}, {"id": 6, "q": "表象文化専修には、美術史、映像文化、文化共生学の三つの領域がありますが、どれに一番関心がありますか。", "a": "今は映像文化の領域に一番関心があります。万博では映像やメディアの新しい使い方がたくさん見られたので、それを分析する方法を学びたいからです。ただ、ポスターや美術作品も研究の対象なので、美術史の考え方も必要だと思っています。一つに決めてしまうより、二つの領域を行き来しながら学びたいです。", "type": "normal", "parent": 5, "sum": "(꼬리) 3개 영역 중 관심", "asum": "영상문화가 가장 관심(만박의 영상·미디어). 미술사도 필요해 두 영역을 오가며 배우고 싶음", "kw": ["映像文化", "美術史", "行き来"]}, {"id": 7, "q": "視覚文化に関心を持ったきっかけを教えてください。", "a": "1970年の大阪万博の資料を見たことがきっかけです。最初は建物の大きさや形に目が行きましたが、ポスターやシンボルマーク、美術作品も見ていくうちに、どれにも科学技術への期待や「人類は進歩していく」という、当時の考え方が込められていると分かってきました。目に見える形から、その時代の人の気持ちまで見えてくるところに、すごく引かれました。", "type": "normal", "sum": "시각문화에 관심 갖게 된 계기", "asum": "1970 오사카 만박 자료. 포스터·심볼·미술 속에 과학기술 기대와 '진보' 사고가 담겨 있음을 알게 됨", "kw": ["1970年", "ポスター", "進歩", "当時の考え方"]}, {"id": 8, "q": "そもそも、なぜ1970年の万博の資料を見ることになったのですか。", "a": "2025年の大阪・関西万博のニュースを見たのがきっかけです。万博の建物というと、機械っぽくて未来的なものを想像していたんですが、2025年は大きな木の建物があって、私が思っていた「未来」のイメージとかなり違っていました。それで、昔の万博は未来をどう見せていたんだろうと気になって、1970年の万博を調べてみたんです。", "type": "normal", "parent": 7, "sum": "(꼬리) 1970 만박 자료를 보게 된 이유", "asum": "2025 만박 뉴스에서 큰 목조 건물을 보고 기존 '미래' 이미지와 달라, 옛 만박은 미래를 어떻게 보였는지 궁금해짐", "kw": ["2025年", "木の建物", "未来", "調べ"]}, {"id": 9, "q": "1970年の万博の資料の中で、一番印象に残っているものは何ですか。", "a": "岡本太郎の太陽の塔です。写真で見たときは不思議な形だなと思っただけでしたが、科学技術の進歩をアピールする万博の真ん中に、少し原始的にも見える塔が立っていたと知って、とても面白いと思いました。「進歩」を祝う場所なのに、それとは違うメッセージも同時にあったのではないかと感じたからです。", "type": "draft", "note": "※ 実際に見た資料で作り直すこと", "sum": "1970 만박 자료 중 인상 깊은 것", "asum": "(학생이 본 자료로 수정) 예: 태양의 탑 — 진보를 축하하는 만박 한가운데 원시적 탑, 다른 메시지도 있었을 것", "kw": []}, {"id": 10, "q": "1970年の万博のテーマを知っていますか。", "a": "はい、「人類の進歩と調和」です。私はこの言葉の中の「進歩」のほうが、ポスターやシンボルではとても強く表現されていると感じました。でも「調和」という言葉も入っているので、ただ前に進むだけでなく、世界の国がうまく共に生きることも意識されていたのだと思います。", "type": "normal", "parent": 9, "sum": "(꼬리) 1970 만박 테마", "asum": "'인류의 진보와 조화'. 포스터·심볼에선 '진보'가 강했지만 '조화'도 포함돼 세계가 함께 사는 의식도 있었음", "kw": ["人類の進歩と調和", "進歩", "調和", "共に"]}, {"id": 11, "q": "2025年の大阪・関西万博には、実際に行きましたか。", "a": "残念ながら、2025年の万博には行けませんでした。そのかわり、ニュースや公式サイト、行った人の写真や動画をたくさん見て調べました。ただ、1970年の万博のほうは、万博記念公園のEXPO'70パビリオンで今開かれている「1970年大阪万博ビフォー・アフター展」を見に行きました。閉幕したあと、パビリオンや展示物が日本のあちこちに移されて、今も使われていることを知って、万博は終わったあとも形を変えて残っていくんだと感じました。", "type": "draft", "note": "※ 見学後に、実際に見たもの・感じたことを1〜2文で必ず書き足すこと", "sum": "2025 만박 방문 여부", "asum": "못 갔음. 뉴스·공식사이트·영상으로 조사. 1970 만박은 만박기념공원 EXPO'70 전시를 봄(느낀 점 추가)", "kw": []}, {"id": 12, "q": "2025年の万博では、どんな特徴に気づきましたか。", "a": "テーマが「いのち輝く未来社会のデザイン」だったように、技術や経済よりも、命や、人と自然が共に生きること、そして持続可能な社会が大切にされていると感じました。特に大屋根リングは、日本の伝統的な木の組み方に今の技術を合わせて作られていて、自然の素材と技術が一緒になった「これからの未来」を、建物そのもので見せているように思いました。", "type": "normal", "sum": "2025 만박의 특징", "asum": "테마 '생명 빛나는 미래사회 디자인' — 기술·경제보다 생명·공생·지속가능. 대지붕 링은 전통 목조 기술+현대 기술", "kw": ["いのち輝く未来社会のデザイン", "大屋根リング", "持続可能", "木の組み方"]}, {"id": 13, "q": "1970年と2025年の万博の、一番大きな違いは何だと思いますか。", "a": "デザインが新しいか古いかというより、未来をどう見ているか、その見方が違うと思います。1970年は、技術が発展すれば社会は豊かになる、という期待がはっきり出ている気がします。2025年は、命や共生のように、何を大事にして生きるかという問いのほうが前に出ていると感じます。同じ「未来」という言葉でも、時代によって中身が変わるところが面白いです。", "type": "normal", "sum": "1970과 2025의 가장 큰 차이", "asum": "디자인 신구보다 '미래를 보는 방식' 차이. 1970=기술이 풍요를 가져온다는 기대, 2025=무엇을 소중히 살 것인가", "kw": ["未来をどう見ている", "1970年", "2025年", "共生", "時代によって"]}, {"id": 14, "q": "でも、2025年の万博でも最新技術はたくさん使われていましたよね。「1970年は技術、2025年は環境」と、そんなに簡単に分けられるでしょうか。", "a": "おっしゃるとおりだと思います。2025年にも、空飛ぶクルマやiPS細胞のような最新技術がたくさん紹介されていました。ですので、技術か環境かという二つに分けるのではなく、技術を「何のために使うのか」という目的の置き方が変わったのではないかと考えています。そこを、実際の資料をもとに確かめるのが、大学でやりたいことです。", "type": "normal", "parent": 13, "sum": "(꼬리) 기술/환경 이분법에 대한 반론", "asum": "맞는 말씀. 2025에도 첨단기술 많음. 기술을 '무엇을 위해 쓰는가'라는 목적 설정이 달라졌다고 봄, 자료로 확인하고 싶음", "kw": ["空飛ぶクルマ", "iPS", "目的", "実際の資料"]}, {"id": 15, "q": "なぜ万博を研究したいのですか。", "a": "万博は、新しい技術を見せるイベントであると同時に、その時代の人が「こんな社会になったらいいな」と思い描いた未来を、一つの場所にぎゅっと集めたものだと思うからです。それに、建物もポスターも映像も展示も、いろいろな表現が一度に集まっています。時代の考え方と、目に見える表現の関係を調べるには、とてもいい対象だと思いました。", "type": "normal", "sum": "만박을 연구하고 싶은 이유", "asum": "그 시대 사람들이 그린 미래가 한곳에 모인 곳. 건축·포스터·영상·전시가 한꺼번에 있어 시대 생각과 표현의 관계를 보기 좋음", "kw": ["未来", "建物", "ポスター", "時代の考え方"]}, {"id": 16, "q": "具体的には、何と何を比べたいですか。", "a": "最初は、比べやすい公式のポスターやシンボルマークから始めたいです。それぞれがどんな色や形、モチーフで「未来」を見せているかを比べて、その違いを当時の社会の様子と合わせて考えたいです。力がついてきたら、映像や美術作品、展示空間にも少しずつ広げていきたいと思っています。", "type": "normal", "sum": "구체적으로 무엇을 비교?", "asum": "먼저 공식 포스터·심볼마크의 색·형태·모티브를 비교해 당시 사회와 연결. 이후 영상·미술·전시공간으로 확장", "kw": ["ポスター", "シンボルマーク", "色や形", "当時の社会"]}, {"id": 17, "q": "資料はどうやって集めるつもりですか。", "a": "まずは大学の図書館で、当時の公式記録や研究書を読みたいです。それから、万博記念公園には1970年の資料を展示している施設があるので、実際に行って、ポスターや当時の写真を自分の目で見たいと思っています。2025年の万博は、公式サイトや記録集、ニュースなどを集めて、同じ基準で比べられるように整理したいです。", "type": "normal", "parent": 16, "sum": "(꼬리) 자료 수집 방법", "asum": "대학 도서관의 공식 기록·연구서, 만박기념공원 전시 시설 방문, 2025는 공식사이트·기록집·뉴스를 같은 기준으로 정리", "kw": ["図書館", "万博記念公園", "公式サイト", "同じ基準"]}, {"id": 18, "q": "ポスターなどの視覚的な表現は、人々の考え方にどんな影響を与えると思いますか。", "a": "ポスターを一枚見ただけで、人の考えがすぐ変わるとは思いません。ただ、何を大きく描くか、どんなイメージを使うかには、その時代の人が大切にしていたものが表れやすいと思います。そして、それを多くの人が繰り返し見ることで、「未来ってこういうものだ」というイメージが少しずつ共有されていくのではないでしょうか。", "type": "normal", "sum": "포스터 등 시각표현의 영향", "asum": "한 장으로 생각이 바뀌진 않지만, 시대가 중시한 것이 드러나고 반복 노출로 '미래의 이미지'가 사회에 공유됨", "kw": ["すぐ変わるとは思いません", "時代の人が大切にしていた", "繰り返し", "共有"]}, {"id": 19, "q": "入学したら、「知のナヴィゲーター」でどんなことを学びたいですか。", "a": "文献の読み方や、レポートの書き方、発表の仕方のような、大学で研究するための基本をしっかり身につけたいです。万博の資料を調べるときも、自分の感想だけで終わらせずに、資料や先行研究を根拠にして説明できるようになりたいからです。", "type": "normal", "sum": "'지의 내비게이터'에서 배우고 싶은 것", "asum": "문헌 읽기·리포트·발표 등 연구의 기본. 감상이 아닌 자료·선행연구를 근거로 설명하는 힘", "kw": ["文献の読み方", "レポート", "発表", "先行研究"]}, {"id": 20, "q": "「知へのパスポート」では、何を学びたいですか。", "a": "「知へのパスポート」は少人数の授業で、それぞれの専修がどんなテーマをどうやって研究しているのかを学べると聞きました。表象文化専修のものはもちろん受けたいですが、歴史など、ほかの専修の研究の仕方も体験してみたいです。そうすれば、万博を見る目も、もっと広がると思います。", "type": "normal", "sum": "'지에의 패스포트'에서 배우고 싶은 것", "asum": "소규모 수업에서 각 전수의 연구법을 체험. 표상문화 외에 역사 등도 경험해 만박을 보는 눈을 넓힘", "kw": ["少人数", "専修", "歴史", "万博を見る目"]}, {"id": 21, "q": "門林岳史先生の研究の、どんなところに関心がありますか。", "a": "門林先生は、マクルーハン以降のメディア論を研究されていて、人が技術に対してどんな想像をしてきたのかを、作品や言葉から分析されていると知りました。1970年の万博も、まさに技術が未来をどう変えるかという想像があふれた場所だったと思います。先生のもとで、映像やメディアを、その時代の社会と結びつけて読み解く方法を学びたいです。", "type": "normal", "sum": "몬바야시 교수 연구의 관심점", "asum": "맥루언 이후 미디어론, 기술에 대한 인간의 상상을 분석. 1970 만박도 기술 상상의 장 — 영상·미디어를 사회와 연결해 읽는 법", "kw": ["マクルーハン", "メディア論", "想像", "映像やメディア"]}, {"id": 22, "q": "門林先生の本や論文を読んだことはありますか。", "a": "正直に言うと、まだきちんと読めていません。先生の研究紹介を読んで、技術と想像力の関係を考える研究だと知り、とても興味を持ちました。入学までに、先生のマクルーハンについての本を読んでおきたいと思っています。", "type": "draft", "note": "※ 実際に読んだかどうかで答えを変えること", "parent": 21, "sum": "(꼬리) 몬바야시 교수 저서·논문 읽었는지", "asum": "(실제에 맞게 수정) 예: 아직 제대로 못 읽음. 연구소개로 흥미를 가졌고 입학 전 맥루언 관련 책을 읽고 싶음", "kw": []}, {"id": 23, "q": "桑野梓先生からは、どんなことを学びたいですか。", "a": "桑野先生は日本美術史がご専門で、作品そのものだけでなく、それが作られた背景や経緯、そして実物の作品をきちんと見る力を大切にされていると知りました。私も、ポスターや美術作品をデザインだけで判断するのではなく、なぜその時代にその表現が生まれたのかを、歴史と一緒に考える方法を学びたいです。", "type": "normal", "sum": "쿠와노 교수에게 배우고 싶은 것", "asum": "일본미술사 전문. 작품의 배경·경위와 실물을 보는 힘. 디자인만으로 판단하지 않고 시대 맥락에서 표현의 이유를 생각", "kw": ["日本美術史", "背景", "実物", "歴史と一緒"]}, {"id": 24, "q": "桑野先生のご専門は仏像や近世の美術ですが、現代の万博の研究とどうつながるのですか。", "a": "時代も対象も違うことは分かっています。でも、先生は外から入ってきた文化が、日本の作品の中でどう受け入れられて形を変えたのかを研究されていますよね。万博も、世界中の文化や技術が大阪に集まった場所でした。対象は違っても、「作品をその時代の文脈の中で見る」という方法は同じだと思うので、その基本を先生から学びたいです。関西大学のデジタルアーカイブで、江戸時代の大坂の絵を見られると知ったので、まずは昔の大阪の作品を見る目も養いたいと思っています。", "type": "normal", "parent": 23, "sum": "(꼬리) 불상·근세미술과 만박 연구의 연결", "asum": "시대·대상은 달라도 외래 문화가 일본 작품에서 변형·수용된 방식 연구 ↔ 세계 문화가 모인 만박. '맥락 속에서 보는' 방법이 같음. 디지털 아카이브도 활용", "kw": ["時代も対象も違う", "外から入ってきた文化", "世界中", "文脈", "デジタルアーカイブ"]}, {"id": 25, "q": "1年生のあいだに、ほかの分野にもっと興味がわいたら、どうしますか。", "a": "今は表象文化専修が第一希望ですが、ほかの分野に興味が出てくるのも、悪いことではないと思っています。たとえば歴史の研究方法を学べば、万博が開かれたころの社会をもっと深く理解できるはずです。1年生でいろいろ経験して、自分の関心をはっきりさせてから専修を選びたいです。", "type": "normal", "sum": "1학년 때 다른 분야에 흥미가 생기면", "asum": "나쁜 일이 아님. 역사 연구법을 배우면 만박 시대 이해가 깊어짐. 여러 경험 후 전수를 선택", "kw": ["悪いことではない", "歴史の研究方法", "1年生", "専修を選びたい"]}, {"id": 26, "q": "専修は2年生で決まりますが、もし表象文化専修に入れなかったらどうしますか。", "a": "そうならないように、1年生のうちからしっかり勉強したいと思っています。ただ、もしそうなったとしても、関西大学の文学部では専修の枠を越えて授業がとれると聞いています。どの専修に入っても、視覚文化への関心は持ち続けて、それを自分の専修の視点から深めていきたいです。", "type": "normal", "sum": "표상문화 전수에 못 들어가면", "asum": "그렇게 안 되게 1학년부터 열심히. 전수를 넘나드는 수강이 가능, 어느 전수든 시각문화 관심을 이어 심화", "kw": ["専修の枠を越えて", "授業がとれる", "視覚文化", "深めて"]}, {"id": 27, "q": "なぜ韓国ではなく、日本で学びたいのですか。", "a": "小さいころ日本で暮らしていたので、日本の文化は私にとって身近なものでした。韓国に戻ってから、逆に日本を少し外から見るようになって、前とは違うところに気づくようになりました。それに、私が研究したい二つの万博は、どちらも大阪で開かれています。昔から町の人たちの文化が育ってきた大阪で、実際の資料に触れながら、表現の中にある社会の意味を考えてみたいと思いました。", "type": "normal", "sum": "한국 아닌 일본에서 배우려는 이유", "asum": "어릴 때 일본에서 살아 친숙, 귀국 후 일본을 밖에서 보게 됨. 연구하려는 두 만박이 모두 오사카 — 실제 자료를 접하며 연구", "kw": ["日本の文化", "外から見る", "二つの万博", "大阪"]}, {"id": 28, "q": "卒業後は何をしたいですか。", "a": "美術館や文化施設で、展示や文化イベントを企画する仕事がしたいです。大学で、作品の中にある時代の考え方を読み取る力をつけて、見に来た人が自分で意味を見つけられるような、体験できる展示を作りたいです。そうやって、人と文化をつなぐ仕事ができたらうれしいです。", "type": "normal", "sum": "졸업 후 하고 싶은 일", "asum": "미술관·문화시설에서 전시·문화행사 기획. 관람객이 스스로 의미를 찾는 체험형 전시로 사람과 문화를 잇고 싶음", "kw": ["展示", "文化イベント", "企画", "人と文化をつなぐ"]}, {"id": 29, "q": "どんな企画者になりたいですか。", "a": "情報を一方的に伝えるのではなくて、来た人が作品や空間を体験しながら、自分で意味を見つけられるような展示を作りたいです。たとえば「未来」をテーマに、1970年と2025年の表現を並べて見せたら、見る人も、今の自分たちは何を大切にしているんだろう、と考えるきっかけになると思います。", "type": "normal", "parent": 28, "sum": "(꼬리) 어떤 기획자가 되고 싶은지", "asum": "일방적 전달이 아니라 체험하며 스스로 의미를 찾게 하는 전시. 예: '미래' 주제로 1970과 2025 표현을 나란히 전시", "kw": ["一方的", "体験", "自分で意味", "1970年と2025年"]}, {"id": 30, "q": "最近見た展示やイベントで、印象に残っているものはありますか。", "a": "韓国の国立中央博物館で開かれた「国中博扮装遊び」というイベントです。参加者が博物館の所蔵品になりきって、衣装やパフォーマンスで表現するコンテストで、今年の全国大会では、朝鮮時代の鯉の形をした白磁の水滴を演じた人が大賞をとりました。ガラスケースの中の文化財を、自分の体で楽しみながら表現するのを見て、展示は「見るだけ」でなくてもいいんだと感じました。", "type": "draft", "note": "※ 実際に見たものを優先。見ていない場合は「ニュースで見た」と正直に", "sum": "최근 본 전시·이벤트", "asum": "(실제 본 것으로 수정) 예: 국립중앙박물관 '국중박 분장놀이' — 전시는 '보기만' 하지 않아도 된다는 느낌", "kw": []}, {"id": 31, "q": "では、あなたにとって「よい展示」とは何ですか。", "a": "見終わったあとに、自分の生活や社会について、何か一つ新しい問いを持って帰れる展示だと思います。知識がたくさん増えることも大事ですが、「どうしてだろう」と考え続けたくなるような展示のほうが、ずっと記憶に残ると思うからです。", "type": "normal", "parent": 30, "sum": "(꼬리) 좋은 전시란", "asum": "보고 나서 삶·사회에 대한 새로운 질문 하나를 가져가는 전시. 계속 '왜?'를 생각하게 하는 전시가 기억에 남음", "kw": ["新しい問い", "どうしてだろう", "記憶に残る"]}, {"id": 32, "q": "学芸員の資格に興味はありますか。", "a": "はい、あります。関西大学では学芸員の資格がとれる課程があると知りました。美術館で企画の仕事をしたいので、表象文化の勉強と一緒に、作品の扱い方や展示の基本も学んで、資格にもぜひ挑戦したいです。", "type": "normal", "sum": "학예사 자격 관심", "asum": "있음. 간사이대에 과정이 있음. 기획을 하고 싶어 작품 취급·전시 기초도 배워 자격에 도전", "kw": ["学芸員", "資格", "作品の扱い方", "展示の基本"]}, {"id": 33, "q": "あなたにとって「未来」とは何ですか。", "a": "ただこれからやって来る時間、というより、その時代の人たちが「社会はこうあってほしい」と願って描くイメージのようなものだと思います。だから、1970年と2025年では、同じ未来という言葉でも、思い描いていたものが違います。その違いを見れば、それぞれの時代が何を大事にしていたのかも見えてくると思っています。", "type": "normal", "sum": "당신에게 '미래'란", "asum": "다가올 시간이라기보다 그 시대 사람들이 '사회가 이랬으면' 하고 그린 이미지. 1970과 2025의 차이에서 시대의 가치가 보임", "kw": ["願って", "イメージ", "1970年と2025年", "大事にしていた"]}, {"id": 34, "q": "ほかに受験している大学はありますか。", "a": "はい、立命館大学のデザイン・アート学部と、同志社大学のグローバル・コミュニケーション学部も受けました。分野は少しずつ違いますが、どれも「目に見える表現や文化を通して、人や社会を考える」という点ではつながっています。その中でも、表現の背景にある歴史や社会まで研究できる関西大学の文学部が、私のやりたいことに一番近いと思っています。", "type": "draft", "note": "※ 実際の出願状況に合わせて答えること", "sum": "다른 지원 대학", "asum": "(실제 출원에 맞게 수정) 예: 리쓰메이칸 디자인·아트, 도시샤 GC. 분야는 달라도 '표현을 통해 사람·사회를 본다'로 연결, 간사이대 문학부가 가장 가까움", "kw": []}, {"id": 35, "q": "日本語で、まだ難しいと感じるところはありますか。", "a": "日常の会話はほとんど問題ありませんが、論文のような硬い文章や、難しい漢字はまだ時間がかかります。なので、毎日少しずつ専門的な文章を読む練習をしています。大学に入ったら、レポートを書きながら、もっと自然に使えるようにしたいです。", "type": "normal", "sum": "일본어 어려운 점", "asum": "일상회화는 거의 문제없음. 논문 같은 딱딱한 글·어려운 한자는 시간이 걸림. 매일 전문 글 읽기 연습, 입학 후 리포트로 향상", "kw": ["日常の会話", "硬い文章", "漢字", "毎日少しずつ"]}, {"id": 36, "q": "文学部の学生はほとんどが日本人ですが、一緒に学んでいくことに不安はありませんか。", "a": "あまり不安はありません。日本で育った時期もありますし、韓国でも日本の人との交流会によく参加してきたので、日本の人と話すことには慣れています。オーケストラで長くいろいろな人と一つの音楽を作ってきたので、意見を合わせながら何かを作るのも好きです。むしろ、韓国と日本の両方を知っているので、ゼミの話し合いで少し違う見方を出せると思います。", "type": "normal", "sum": "일본인이 대부분인 환경의 불안", "asum": "불안 없음. 일본 거주 경험과 교류회 경험, 오케스트라 협업 경험. 한일 양쪽을 알아 세미나에서 다른 시각 제시 가능", "kw": ["不安はありません", "慣れて", "オーケストラ", "違う見方"]}, {"id": 37, "q": "あなたの長所と短所を教えてください。", "a": "長所は、一つ気になることがあると、とことん調べるところです。万博のことも、最初は一枚のポスターから始まって、気づいたら当時の社会のことまで調べていました。短所は、調べ始めると範囲が広がりすぎてしまうところです。最近は、最初に「今日はここまで」と決めてから始めるようにしています。", "type": "normal", "sum": "장점과 단점", "asum": "장점: 궁금한 건 끝까지 조사(포스터→시대 사회까지). 단점: 범위가 너무 넓어짐 → '오늘은 여기까지'로 정하고 시작", "kw": ["とことん調べる", "ポスター", "範囲が広がりすぎて", "今日はここまで"]}, {"id": 38, "q": "最近気になったニュースはありますか。", "a": "1970年の万博の太陽の塔が、去年、国の重要文化財になったというニュースです。万博のために作られた、もともとは一時的なはずの建物が、今では日本の文化財として残されることになったのが面白いと思いました。2025年の万博でも、大屋根リングの一部が残されることになったので、50年後にそれがどう見られているのか、とても気になります。", "type": "normal", "sum": "최근 신경 쓰인 뉴스", "asum": "1970 만박의 태양의 탑이 작년 중요문화재가 된 뉴스. 2025 대지붕 링 일부도 남게 돼 50년 후 평가가 궁금", "kw": ["太陽の塔", "重要文化財", "大屋根リング", "50年後"]}, {"id": 39, "q": "最近読んだ本を教えてください。", "a": "『嫌われる勇気』という本です。私は嫌なことがあると、それをずっと引きずってしまうタイプでした。でもこの本を読んで、過去の出来事が今の自分を決めるわけではない、という考え方を知りました。起きたことより、そのあと自分がどう動くかのほうが大事なんだと思えるようになって、今は落ち込んでも、自分にできることを探すようにしています。", "type": "normal", "sum": "최근 읽은 책", "asum": "『미움받을 용기』 — 과거에 얽매이던 내가 '지난 일이 현재를 정하지 않는다'는 생각을 알게 되어, 낙담해도 할 수 있는 일을 찾게 됨", "kw": ["嫌われる勇気", "引きずって", "過去", "自分にできること"]}, {"id": 40, "q": "どんな内容の本か、簡単に紹介してください。", "a": "アドラーという心理学者の考え方を、哲学者と青年の対話の形で紹介している本です。悩んでいる青年が、哲学者と何度も話し合いながら、人の悩みはほとんどが人間関係から生まれるとか、他人にどう思われるかより、自分がどう生きるかが大事だ、ということに気づいていきます。会話の形なので、難しい内容でも読みやすかったです。", "type": "normal", "parent": 39, "sum": "(꼬리) 책 내용 소개", "asum": "아들러 심리학을 철학자와 청년의 대화로 소개. 고민은 대부분 인간관계에서 오며 타인의 시선보다 내가 어떻게 사는가가 중요. 읽기 쉬움", "kw": ["アドラー", "哲学者と青年", "人間関係", "読みやすかった"]}, {"id": 41, "q": "日本に来たら、どこに住む予定ですか。一人暮らしは大丈夫ですか。", "a": "大学の近くで一人暮らしをする予定です。小さいころ日本で暮らしていたので、生活のことはあまり心配していません。料理も少しずつ練習しています。", "type": "draft", "note": "※ 実際の予定で答えること", "sum": "일본에서 거주 계획·자취", "asum": "(실제 계획에 맞게 수정) 예: 대학 근처 자취, 어릴 때 일본 거주라 걱정 적음, 요리도 연습 중", "kw": []}, {"id": 42, "q": "趣味は何ですか。", "a": "フルートを吹くことです。オーケストラでずっと演奏してきたので、今も時間があるときは吹いたり、コンサートに行ったりしています。", "type": "draft", "note": "※ 本人の実際の趣味で答えること", "sum": "취미", "asum": "(실제 취미로 수정) 예: 플루트 연주 — 오케스트라 경험, 지금도 연주·콘서트 감상", "kw": []}, {"id": 43, "q": "大学に入ったら、勉強以外にどんなことをしたいですか。", "a": "関西大学には交響楽団があると知りました。私は前にオーケストラでフルートを吹いていたので、入学したら、ぜひ参加して音楽も続けたいです。それから、大阪や京都の美術館や博物館にもたくさん通って、いろいろな展示を見て回りたいと思っています。", "type": "normal", "sum": "입학 후 공부 외에 하고 싶은 것", "asum": "간사이대 교향악단에 참가해 음악을 계속(플루트). 오사카·교토의 미술관·박물관 순회", "kw": ["交響楽団", "フルート", "美術館", "博物館"]}, {"id": 44, "q": "ストレス解消法は何ですか。", "a": "一人の時間を作って、本を読むことです。特に、人の気持ちや考え方についての本を読むと、自分がどうしてしんどいのか、落ち着いて整理できるんです。だから、ストレスを無理に忘れようとするより、自分の気持ちと向き合って、どうすればいいかを考える時間にしています。", "type": "normal", "sum": "스트레스 해소법", "asum": "혼자만의 시간에 독서(특히 사람 마음에 관한 책). 잊으려 하기보다 감정과 마주하고 방법을 생각", "kw": ["一人の時間", "本", "整理", "向き合って"]}, {"id": 45, "q": "最後に、何か言っておきたいことはありますか。", "a": "今日はありがとうございました。万博のことを調べるうちに、一枚のポスターの向こうに、たくさんの人の願いがあることを知りました。関西大学で、その願いをきちんと読み取れる力をつけたいです。どうぞよろしくお願いいたします。", "type": "normal", "closing": true, "sum": "마지막으로 하고 싶은 말", "asum": "감사 인사. 포스터 한 장 너머의 많은 사람의 소망을 알게 됨 — 대학에서 그 소망을 읽어낼 힘을 기르고 싶음", "kw": ["ありがとうございました", "ポスター", "願い", "読み取れる力"]}], "phrases": [], "teacher": "미나미 쌤", "examDate": "", "follow": {"1": [2, 5], "2": [4, 5, 15], "4": [2, 5, 25], "5": [7, 21, 23, 15], "7": [9, 11, 15, 13], "9": [7, 12, 13], "11": [12, 13, 9], "12": [13, 11, 15], "13": [15, 33, 12], "15": [16, 13, 18], "16": [18, 19, 15], "18": [16, 33, 31], "19": [20, 25, 21], "20": [19, 25, 26], "21": [23, 19, 15], "23": [21, 25, 19], "25": [26, 20, 4], "26": [25, 34, 2], "27": [28, 36, 2], "28": [32, 30, 43], "30": [28, 32, 33], "32": [28, 30], "33": [13, 15, 18], "34": [2, 26, 37], "35": [36, 27], "36": [35, 27, 37], "37": [44, 39, 36], "38": [39, 30], "39": [44, 37, 38], "41": [42, 43, 36], "42": [43, 44, 41], "43": [42, 44, 32], "44": [39, 42, 37]}, "gate": {"salt": "cf689f9d", "hash": "14d5344926fc93"}};
+
+/* ===== 설정값 (필요 시 조정) ===== */
+const BASE_TOTAL = 10;      // 기본 훈련 횟수 (1~5회 읽기, 6~10회 암기)
+const BLOCK = 5;            // 5회 묶음 — 한 묶음 안에서 질문 풀 전체를 최소 1번씩 출제
+const poolQs = () => C.questions.filter(q=>!(q.type==="custom" && q.optional && !((S.profile&&S.profile.other)||"").trim()));   // 선택형 직접작성 문항은 작성 전엔 제외
+const SESSION_SIZE = Math.min(15, C.questions.length); // 회차당 질문 수
+const READ_SESSIONS = 5;    // 1~5회: 대본 보고 읽기, 6~10회: 음성만 듣고 답하기
+// 회차별 통과 기준 (읽기: 이 점수를 넘어야 다음 질문 / 암기: 질문별 통과 표시)
+const PASS_BY_STAGE = {1:50, 2:50, 3:50, 4:60, 5:60, 6:70, 7:70, 8:70, 9:75, 10:80};
+const GATE_SCORE = PASS_BY_STAGE[10]; // 10회차 평균이 이 점수 미만이면 6~10회를 다시 진행
+const MAX_EXTRA_BLOCKS = 1; // 6~10회 재도전 횟수. 그래도 미달이면 리포트를 우선 제출
+const SILENCE_MS = 5000, NOSPEECH_MS = 7000; // 답변 자동 종료: 말이 끊긴 시간 / 무응답 대기 시간
+const MAX_TRIES = 3;        // 읽기 단계: 한 질문 최대 시도 (초과 시 '미통과'로 기록하고 진행)
+const LOW_BELOW = 60, HIGH_FROM = 80; // 리포트: 취약 / 우수 구분 점수
+const KEY = "mensetsuTrainer.v2:" + C.student + ":" + C.school;
+
+/* ===== 저장소 (실패해도 동작) ===== */
+let mem = null;
+function load(){
+  try{ const r = localStorage.getItem(KEY); if(r) return JSON.parse(r); }catch(e){}
+  return mem ? JSON.parse(mem) : null;
+}
+function save(){
+  const s = JSON.stringify(S); mem = s;
+  try{ localStorage.setItem(KEY, s); }catch(e){}
+}
+let S = load();
+if(!S || S.v!==2) S = {v:2, profile:{grade:"",other:"",drafts:{}}, done:[], cur:null, extra:0};
+const total = () => BASE_TOTAL + BLOCK*(S.extra||0);
+const stageOf = n => n<=BASE_TOTAL ? n : ((n-BASE_TOTAL-1)%BLOCK)+READ_SESSIONS+1;   // 11→6 … 15→10
+const phaseOf = n => stageOf(n)<=READ_SESSIONS ? "read" : "memo";
+const passFor = n => PASS_BY_STAGE[stageOf(n)];
+const blockStart = n => { const st=stageOf(n); return st<=READ_SESSIONS ? n-(st-1) : n-(st-READ_SESSIONS-1); };
+
+/* ===== 유틸 ===== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmtDT = t => new Date(t).toLocaleString("ko-KR",{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"});
+const fmtDur = sec => { sec=Math.round(sec); const m=Math.floor(sec/60); return m? m+"분 "+(sec%60)+"초" : sec+"초"; };
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
+const qById = id => C.questions.find(q=>q.id===id);
+function scriptOf(q){
+  if(q.type==="grade") return q.a.replace("{{GRADE}}", S.profile.grade ? S.profile.grade+"" : "（　）");
+  if(q.type==="custom") return S.profile.other || "";
+  if(q.type==="draft"){ const d=(S.profile.drafts||{})[q.id]; return (d!=null&&d.trim())? d : q.a; }
+  return q.a;
+}
+const needsGrade = C.questions.some(q=>q.type==="grade");
+const needsOther = C.questions.some(q=>q.type==="custom");
+const needsOtherReq = C.questions.some(q=>q.type==="custom" && !q.optional);
+const drafts = C.questions.filter(q=>q.type==="draft");
+const setupOk = () => (!needsGrade || S.profile.grade) && (!needsOtherReq || (S.profile.other||"").trim().length>=8) && (!drafts.length || S.profile.draftOk);
+
+/* ===== 텍스트 정규화 / 채점 ===== */
+const KNUM = {"〇":"0","一":"1","二":"2","三":"3","四":"4","五":"5","六":"6","七":"7","八":"8","九":"9","十":"10"};
+function normChars(s){
+  const out=[];
+  for(let i=0;i<s.length;i++){
+    for(let ch of s[i].normalize("NFKC").toLowerCase()){
+      if(ch>="ァ" && ch<="ヶ") ch=String.fromCharCode(ch.charCodeAt(0)-0x60);
+      if(KNUM[ch]) ch=KNUM[ch];
+      for(const c2 of ch){ if(/[\p{L}\p{N}\p{M}]/u.test(c2)) out.push({ch:c2, idx:i}); }
+    }
+  }
+  return out;
+}
+const normStr = s => normChars(s).map(o=>o.ch).join("");
+
+function lcsPairs(a,b){
+  const n=a.length,m=b.length,w=m+1,dp=new Uint16Array((n+1)*w);
+  for(let i=1;i<=n;i++)for(let j=1;j<=m;j++)
+    dp[i*w+j]= a[i-1]===b[j-1] ? dp[(i-1)*w+j-1]+1 : Math.max(dp[(i-1)*w+j],dp[i*w+j-1]);
+  const pairs=[]; let i=n,j=m;
+  while(i>0&&j>0){
+    if(a[i-1]===b[j-1]){pairs.push([i-1,j-1]);i--;j--;}
+    else if(dp[(i-1)*w+j]>=dp[i*w+j-1]) i--; else j--;
+  }
+  return pairs.reverse();
+}
+function slice(orig, nc, from, to){ // nc: normChars, [from,to] 정규화 인덱스(포함) → 원문 조각
+  if(from>to) return "";
+  return orig.slice(nc[from].idx, nc[to].idx+1).trim();
+}
+function analyze(script, heard){
+  const A=normChars(script), B=normChars(heard);
+  const a=A.map(o=>o.ch), b=B.map(o=>o.ch);
+  const pairs = (a.length&&b.length) ? lcsPairs(a,b) : [];
+  const L=pairs.length;
+  const matched=new Set(pairs.map(p=>A[p[0]].idx));
+  const bad=new Set(); A.forEach((o,i)=>{ if(!pairs.some(p=>p[0]===i)) bad.add(o.idx); });
+  const ops=[]; let pi=-1,pj=-1;
+  const pts=pairs.concat([[a.length,b.length]]);
+  for(const [ni,nj] of pts){
+    const gs=[pi+1,ni-1], gt=[pj+1,nj-1];
+    const sTxt=slice(script,A,gs[0],gs[1]), tTxt=slice(heard,B,gt[0],gt[1]);
+    if(sTxt&&tTxt) ops.push({t:"sub",s:sTxt,h:tTxt});
+    else if(sTxt) ops.push({t:"miss",s:sTxt});
+    else if(tTxt && B.slice(gt[0],gt[1]+1).length>=2) ops.push({t:"extra",h:tTxt});
+    pi=ni; pj=nj;
+  }
+  const coverage = a.length ? L/a.length : 0;
+  const dice = (a.length+b.length) ? 2*L/(a.length+b.length) : 0;
+  // 대본 글자별 오류 표시 (원문 인덱스)
+  return {ops, bad:[...bad], coverage, dice, readScore:Math.round(100*(0.7*coverage+0.3*dice)), hLen:b.length};
+}
+function bigrams(s){ const set=new Set(); for(let i=0;i<s.length-1;i++) set.add(s.slice(i,i+2)); return set; }
+function memoScore(q, script, heard){
+  const hn=normStr(heard);
+  const groups=(q.kw||[]).map(k=>Array.isArray(k)?k:[k]);
+  const missKw=[], hitKw=[];
+  groups.forEach(g=>{ (g.some(x=>hn.includes(normStr(x))) ? hitKw : missKw).push(g[0]); });
+  const sb=bigrams(normStr(script)), hb=bigrams(hn);
+  let hit=0; sb.forEach(x=>{ if(hb.has(x)) hit++; });
+  const bg = sb.size? hit/sb.size : 0;
+  const kw = groups.length ? hitKw.length/groups.length : bg;
+  return {score:Math.round(100*(0.7*kw+0.3*bg)), missKw, hitKw};
+}
+function evaluate(q, heard, phase, passScore){
+  const script=scriptOf(q);
+  const an=analyze(script, heard);
+  let score, missKw=[], hitKw=[];
+  if(phase==="read"){ score=an.readScore; }
+  else { const m=memoScore(q,script,heard); score=m.score; missKw=m.missKw; hitKw=m.hitKw; }
+  const pass = score >= passScore;
+  return {score, pass, ops:an.ops, bad:an.bad, missKw, hitKw, hLen:an.hLen};
+}
+function scriptHtml(script, badIdx){
+  const bad=new Set(badIdx||[]);
+  return [...script].map((c,i)=> bad.has(i) ? '<span class="bad">'+esc(c)+'</span>' : esc(c)).join("");
+}
+
+/* ===== 소리: 비프음 / 면접관 음성 ===== */
+let ac=null;
+function unlockAudio(){ try{ ac=ac||new (window.AudioContext||window.webkitAudioContext)(); if(ac.state==="suspended") ac.resume(); }catch(e){} }
+function beep(freq=880, ms=320){
+  return new Promise(res=>{
+    try{
+      unlockAudio();
+      const o=ac.createOscillator(), g=ac.createGain();
+      o.type="sine"; o.frequency.value=freq; g.gain.value=0.2;
+      o.connect(g); g.connect(ac.destination); o.start();
+      setTimeout(()=>{ try{o.stop();}catch(e){} res(); }, ms);
+    }catch(e){ res(); }
+  });
+}
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+let ttsBusy=false, ttsOn=true;
+// 일본어 음성 선택: 부자연스러운 음성(맥의 Eddy/Reed 등 다국어 음성)은 피하고 자연스러운 음성을 우선
+const BAD_VOICE=/Eddy|\bFlo\b|Grandma|Grandpa|Reed|Rocko|Sandy|Shelley|Zarvox|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Deranged|Good News|Hysterical|Jester|Organ|Superstar|Trinoids|Whisper|Wobble|Albert|Fred|Junior|Kathy|Ralph|Princess/i;
+const GOOD_VOICE=[[/Natural|Online/i,60],[/Nanami|Keita|Ayumi|Haruka|Sayaka|Ichiro/i,40],[/Google/i,35],[/Kyoko|Otoya|O-?Ren|Hattori/i,30]];
+function jaVoices(){ try{ return speechSynthesis.getVoices().filter(v=>/^ja/i.test(v.lang)); }catch(e){ return []; } }
+function voiceScore(v){
+  let s=0; if(BAD_VOICE.test(v.name)) s-=100;
+  GOOD_VOICE.forEach(([re,w])=>{ if(re.test(v.name)) s+=w; });
+  if(/enhanced|premium|プレミアム|拡張/i.test(v.name+" "+v.voiceURI)) s+=10;
+  return s;
+}
+function pickVoice(){
+  const list=jaVoices(); if(!list.length) return null;
+  if(S.profile.voice){ const f=list.find(v=>v.name===S.profile.voice); if(f) return f; }
+  return list.slice().sort((a,b)=>voiceScore(b)-voiceScore(a))[0];
+}
+const jaVoice = pickVoice;
+function ttsReady(){ return ttsOn && "speechSynthesis" in window && !!pickVoice(); }
+function speakAsync(text){
+  return new Promise(res=>{
+    if(!ttsOn || !("speechSynthesis" in window)){ res(); return; }
+    try{
+      speechSynthesis.cancel();
+      const u=new SpeechSynthesisUtterance(text); u.lang="ja-JP"; u.rate=0.95; u.pitch=1;
+      const v=pickVoice(); if(v) u.voice=v;
+      ttsBusy=true; let fin=false;
+      const end=()=>{ if(fin) return; fin=true; ttsBusy=false; res(); };
+      u.onend=end; u.onerror=end; setTimeout(end,30000);
+      speechSynthesis.speak(u);
+    }catch(e){ ttsBusy=false; res(); }
+  });
+}
+function stopSpeak(){ try{ speechSynthesis.cancel(); }catch(e){} ttsBusy=false; }
+
+/* ===== 마이크 ===== */
+let micOk=false, lastMicErr=null;
+async function ensureMic(){
+  if(micOk) return true;
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return true; // 판단 불가 → 인식기에 맡김
+  try{ const st=await navigator.mediaDevices.getUserMedia({audio:true}); st.getTracks().forEach(t=>t.stop()); micOk=true; lastMicErr=null; return true; }
+  catch(e){ lastMicErr=e; return false; }
+}
+function micAdvice(code){
+  const blocked="마이크가 차단되어 있어요. 주소창 왼쪽 자물쇠(또는 마이크) 아이콘 → 마이크 '허용' → 새로고침 해 주세요. 그래도 안 되면 PC 설정 → 개인정보 → 마이크에서 Chrome(Edge)을 허용하세요. 미리보기 창이나 카카오톡 같은 앱 안에서 열었다면 Chrome에서 파일을 직접 열어야 해요.";
+  if(/NotAllowed|Security|PermissionDenied|not-allowed/.test(code||"")) return blocked;
+  if(/service-not-allowed/.test(code||"")) return "이 브라우저가 음성인식 서비스를 허용하지 않아요. PC 또는 안드로이드의 Chrome / Edge에서 열어 주세요.";
+  if(/NotFound|audio-capture|DevicesNotFound/.test(code||"")) return "마이크 장치를 찾을 수 없어요. 마이크(이어폰)가 연결되어 있는지 확인해 주세요.";
+  if(/NotReadable|TrackStart/.test(code||"")) return "다른 프로그램(Zoom, Teams 등)이 마이크를 쓰고 있어요. 그 프로그램을 끄고 다시 시도해 주세요.";
+  if(/network/.test(code||"")) return "음성인식 서버(구글)에 연결되지 않아요. 인터넷 연결을 확인하고, 학원/회사 네트워크라면 다른 네트워크(휴대폰 핫스팟)를 써 보세요. Edge에서 계속 안 되면 Chrome으로 열어 보세요.";
+  if(/language-not-supported/.test(code||"")) return "이 브라우저가 일본어 음성인식을 지원하지 않아요.";
+  return "마이크/음성인식 오류가 발생했어요 ("+(code||"알 수 없음")+"). '마이크 진단'을 실행해 보세요.";
+}
+
+/* ===== 음성 인식 엔진 =====
+   - 질문마다 인식기를 새로 켜고, '듣는 중'임을 확인한 뒤에 비프를 울려요. → 질문 음성이 답변에 섞이지 않고, 비프 직후 첫마디부터 인식돼요.
+   - 켜는 순간 접속 오류(network)가 나면 자동으로 다시 시도해요. 답변 도중 끊겨도 자동으로 다시 이어요.
+   - 마이크는 훈련 내내 열어 두고(허용 창 최소화), 같은 마이크 신호로 '말이 끊긴 시간'을 직접 재서 자동 종료해요. */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+const GRACE_MS = 1000;      // 답변 종료 후 마지막 인식 결과를 기다리는 최대 시간
+const NET_MAX = 3;          // 접속 오류 자동 재시도 횟수
+let eng=null, engLive=false, engBoot=false, engArmed=false, engErr="", engNet=0, holdStream=null, win=null, timer=null;
+let micName="", micNote="", lastReopen=0, dcT=null;
+const vad={an:null, src:null, buf:null, hist:[], t:null, alive:false, th:0.015, level:0};
+
+function vadStart(){
+  if(vad.t||!holdStream) return;
+  try{
+    unlockAudio(); if(!ac) return;
+    vad.src=ac.createMediaStreamSource(holdStream); vad.an=ac.createAnalyser(); vad.an.fftSize=1024;
+    vad.src.connect(vad.an); vad.buf=new Float32Array(vad.an.fftSize); vad.hist=[]; vad.alive=false;
+    vad.t=setInterval(vadTick,100);
+  }catch(e){ vad.an=null; }
+}
+function vadStop(){ clearInterval(vad.t); vad.t=null; try{ vad.src&&vad.src.disconnect(); }catch(e){} vad.src=null; vad.an=null; vad.alive=false; }
+function vadTick(){
+  const a=vad.an; if(!a) return;
+  a.getFloatTimeDomainData(vad.buf); let sum=0; for(let i=0;i<vad.buf.length;i++) sum+=vad.buf[i]*vad.buf[i];
+  const rms=Math.sqrt(sum/vad.buf.length);
+  if(rms>0.0003) vad.alive=true;
+  vad.hist.push(rms); if(vad.hist.length>100) vad.hist.shift();
+  const so=vad.hist.slice().sort((x,y)=>x-y), floor=so[Math.floor(so.length*0.15)]||0;
+  vad.th=Math.max(0.015, floor*3); vad.level=rms;
+  const lv=document.getElementById('lvl'); if(lv) lv.style.width=Math.min(100,Math.round(rms*500))+'%';
+  if(rms>vad.th && win && win.on && !win.closing){ win.lastVoice=Date.now(); win.voiceMs=(win.voiceMs||0)+100; }
+}
+
+async function armMic(){
+  engArmed=true; engErr="";
+  if(!isMobile && !holdStream && navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
+    try{ holdStream=await navigator.mediaDevices.getUserMedia({audio:true}); micOk=true; lastMicErr=null; }   // 마이크를 훈련 내내 열어 둠(데스크톱)
+    catch(e){ lastMicErr=e; return false; }
+  } else if(!holdStream && !(await ensureMic())) return false;
+  const tr=holdStream&&holdStream.getAudioTracks()[0];
+  if(tr){ micName=tr.label||micName; tr.onended=()=>{ if(holdStream&&engArmed){ holdStream=null; onMicLost("마이크 연결이 끊겼어요."); } }; }
+  vadStart();
+  return true;
+}
+// 마이크 장치를 다시 인식(이어폰/헤드셋을 꽂거나 뺐을 때)
+async function reopenMic(){
+  lastReopen=Date.now();
+  vadStop(); killEngine();
+  if(holdStream){ holdStream.getTracks().forEach(t=>{ t.onended=null; t.stop(); }); holdStream=null; }
+  micOk=false;
+  const ok=await armMic();
+  if(ok && win && win.on && !win.closing && !eng) startEngine();     // 답변 중이었다면 새 마이크로 인식기를 다시 켬
+  return ok;
+}
+async function onMicLost(why){
+  micNote=(why||"마이크 장치가 바뀌었어요.")+" 다시 연결 중…"; if(view==="session") render();
+  const ok=await reopenMic();
+  micNote= ok ? "✔ 마이크를 다시 인식했어요: "+(micName||"기본 마이크")+(win&&win.on?"":" (▶를 눌러 계속하세요)") : micAdvice(lastMicErr&&lastMicErr.name);
+  if(view==="session"||view==="setup") render();
+}
+if(navigator.mediaDevices && navigator.mediaDevices.addEventListener){
+  navigator.mediaDevices.addEventListener("devicechange",()=>{
+    if(!engArmed || !holdStream) return;
+    clearTimeout(dcT); dcT=setTimeout(()=>{ if(Date.now()-lastReopen>3000) onMicLost("마이크 장치가 바뀌었어요."); },700);
+  });
+}
+function killEngine(){
+  const r=eng; eng=null; engLive=false; engBoot=false;
+  if(r){ r.onend=r.onerror=r.onresult=r.onaudiostart=null; try{ r.abort(); }catch(e){} }
+}
+function disarmMic(){
+  engArmed=false; clearInterval(timer);
+  if(win){ win.on=false; win=null; }
+  killEngine(); vadStop();
+  if(holdStream){ holdStream.getTracks().forEach(t=>t.stop()); holdStream=null; }
+}
+function engFail(){ if(win&&win.on&&!win.closing){ win.err=engErr; stopRec(); } }
+function startEngine(){
+  if(!SR || eng) return;
+  engBoot=true; engLive=false;
+  const r=new SR(); eng=r; r.lang="ja-JP"; r.continuous=true; r.interimResults=true; r.maxAlternatives=1;
+  r.onaudiostart=()=>{ if(eng===r){ engLive=true; engBoot=false; } };
+  r.onresult=e=>{
+    if(eng!==r) return;
+    engNet=0;
+    if(!win||!win.on) return;
+    win.interim="";
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      const x=e.results[i];
+      if(x.isFinal) win.chunks.push({t:x[0].transcript, c:x[0].confidence, at:Date.now()});
+      else win.interim+=x[0].transcript;
+    }
+    const txt=win.chunks.map(c=>c.t).join(" ")+" "+win.interim;
+    if(txt.trim()){ win.hasSpeech=true; win.lastAct=Date.now(); }
+    const el=$("#live"); if(el&&!win.closing) el.textContent=txt;
+  };
+  r.onerror=e=>{
+    if(eng!==r) return;
+    const c=e.error;
+    if(c==="no-speech"||c==="aborted") return;
+    if(c==="network"){ engNet++; if(engNet>=NET_MAX){ engErr=micAdvice("network"); engFail(); } return; }   // 일시적 접속 오류는 자동 재시도
+    engErr=micAdvice(c); engFail();
+  };
+  r.onend=()=>{
+    if(eng!==r) return;
+    eng=null; engLive=false; engBoot=false;
+    if(win&&win.on){
+      if(win.closing){ finishRec(win); return; }
+      if(engArmed&&!engErr) setTimeout(()=>{ if(win&&win.on&&!win.closing&&!eng) startEngine(); }, engNet?500:30);   // 답변 중 끊기면 곧바로 다시 켬
+    }
+  };
+  try{ r.start(); }catch(e){ eng=null; engBoot=false; }
+}
+// 새 인식기를 켜고 '듣는 중' 확인. 켜자마자 접속 오류가 나면 자동 재시도
+async function freshEngine(){
+  if(!SR||!engArmed) return false;
+  for(let k=0;k<NET_MAX;k++){
+    killEngine(); engErr=""; engNet=0;
+    startEngine();
+    const t0=Date.now(); let up=false;
+    while(Date.now()-t0<6000){ if(engErr) return false; if(engLive){ up=true; break; } if(!eng) break; await sleep(40); }
+    if(up){
+      const t1=Date.now();
+      while(Date.now()-t1<500){ if(!eng||engNet>0||engErr) break; await sleep(40); }   // 켜진 직후 오류 여부 확인
+      if(engErr) return false;
+      if(eng&&engLive&&!engNet) return true;
+    }
+    await sleep(300);
+  }
+  engErr=micAdvice("network"); return false;
+}
+function echoLike(chunk, q){   // 면접관 질문이 스피커로 들어와 인식된 조각인지
+  const a=normStr(q), b=normStr(chunk);
+  if(!a||b.length<5) return false;
+  return lcsPairs(a,b).length/b.length>=0.7;
+}
+function startRec(done, opt){
+  const o=Object.assign({silence:SILENCE_MS, noSpeech:NOSPEECH_MS, max:180000, autoStop:true, q:""}, opt||{});
+  clearInterval(timer);
+  win={on:true, closing:false, cb:done, start:Date.now(), lastAct:Date.now(), lastVoice:0, voiceMs:0, hasSpeech:false, chunks:[], interim:"", q:o.q, opt:o, err:""};
+  if(engArmed && !eng) startEngine();
+  timer=setInterval(()=>{
+    const w=win; if(!w||!w.on) return;
+    const now=Date.now();
+    const idle=now-Math.max(w.start, w.lastAct||0, w.lastVoice||0);   // 인식 결과도 마이크 소리도 없던 시간
+    const speech=w.hasSpeech||w.voiceMs>=300;
+    const el=$("#timer"); if(el) el.textContent=Math.round((now-w.start)/1000)+"초 · 조용한 시간 "+Math.floor(idle/1000)+"초";
+    if(w.closing) return;
+    if(now-w.start>o.max) stopRec();
+    else if(o.autoStop && speech && idle>o.silence) stopRec();
+    else if(o.autoStop && !speech && idle>o.noSpeech) stopRec();
+  },250);
+}
+function stopRec(){
+  const w=win; if(!w||!w.on||w.closing) return;
+  w.closing=true; w.stopAt=Date.now();
+  try{ eng&&eng.stop(); }catch(e){}            // 마지막 인식 결과를 내보내게 한 뒤 종료(onend에서 마무리)
+  setTimeout(()=>finishRec(w), GRACE_MS);
+}
+function abortRec(){ clearInterval(timer); if(win){ win.on=false; win=null; } killEngine(); }
+function finishRec(w){
+  if(!w||w!==win||!w.on) return;
+  clearInterval(timer); w.on=false; win=null;
+  killEngine();
+  const early=c=>(c.at-w.start)<2500 && w.q && echoLike(c.t,w.q);
+  const kept=w.chunks.filter(c=>!early(c));
+  const parts=kept.map(c=>c.t.trim()).filter(Boolean);
+  const it=w.interim.trim(); if(it && !(w.q && (Date.now()-w.start)<2500 && echoLike(it,w.q))) parts.push(it);
+  const low=kept.filter(c=>c.c>0&&c.c<0.75).map(c=>c.t.trim()).filter(Boolean);
+  const text=parts.join(" ").trim();
+  w.cb({text, low, dur:((w.stopAt||Date.now())-w.start)/1000, err: text ? "" : (w.err||engErr)});
+}
+window.addEventListener("beforeunload",()=>{ try{ disarmMic(); }catch(e){} });
+
+/* ===== 질문 선택: 회차당 15문항, 꼬리질문 연결, 5회 안에 전체 질문 1회 이상 ===== */
+const _autoFollow={};
+function followOf(id){
+  if(C.follow && C.follow[id] && C.follow[id].length) return C.follow[id];
+  if(!_autoFollow[id]){ // 지정이 없으면 질문+답안의 내용 유사도로 연결
+    const bg=q=>bigrams(normStr(q.q+scriptOf(q)));
+    const me=bg(qById(id)), first=C.questions[0].id;
+    const sc=C.questions.filter(q=>q.id!==id&&q.id!==first).map(q=>{ const o=bg(q); let i=0; me.forEach(x=>{ if(o.has(x)) i++; }); return {id:q.id, s:i/((me.size+o.size-i)||1)}; }).sort((a,b)=>b.s-a.s);
+    _autoFollow[id]=sc.slice(0,3).filter(x=>x.s>0.06).map(x=>x.id);
+  }
+  return _autoFollow[id];
+}
+function weakScore(id){ const s=[]; S.done.forEach(d=>d.results.forEach(r=>{ if(r.id===id) s.push(r.score); })); return s.length? s.reduce((a,b)=>a+b,0)/s.length : 50; }
+function pickWeak(arr){ return arr.slice().sort((a,b)=>(weakScore(a)-weakScore(b))+(Math.random()-0.5)*12)[0]; }
+const rootOf = id => { const q=qById(id); return (q&&q.parent)||id; };
+function buildQueue(n){
+  const pool=poolQs(), poolIds=new Set(pool.map(q=>q.id));
+  const kids={}; pool.forEach(q=>{ if(q.parent && poolIds.has(q.parent)) (kids[q.parent]=kids[q.parent]||[]).push(q.id); });
+  const isChild=q=>q.parent && poolIds.has(q.parent);
+  const ids=pool.filter(q=>!isChild(q)).map(q=>q.id), first=ids[0], others=ids.slice(1);
+  const unit=id=>[id].concat(kids[id]||[]), w=id=>unit(id).length;
+  const SIZE=pool.length<SESSION_SIZE? pool.length : SESSION_SIZE;
+  const want=SIZE-w(first), b=blockStart(n), left=BLOCK-(n-b);
+  const wasSeen=new Set([first]);
+  S.done.filter(d=>blockStart(d.n)===b).forEach(d=>(d.queue||[]).forEach(id=>wasSeen.add(rootOf(id))));
+  const unseen=others.filter(id=>!wasSeen.has(id)), seenO=others.filter(id=>wasSeen.has(id));
+  const unseenW=unseen.reduce((s,id)=>s+w(id),0), seenW=seenO.reduce((s,id)=>s+w(id),0);
+  let newQ=Math.min(want, Math.ceil(unseenW/left)+(left>1?1:0));               // 이번 회차에 처음 만나는 질문 수(꼬리질문 포함)
+  if(seenW < want-newQ) newQ=Math.min(unseenW, want-seenW);
+  const repQ=want-newQ;                                           // 복습 질문 수 — 점수 낮은 것 우선
+  const list=unit(first), used=new Set([first]); let nn=0, nr=0;
+  const fits=id=>list.length+w(id)<=SIZE;
+  const ok=id=>poolIds.has(id) && !used.has(id) && others.includes(id) && fits(id) && (wasSeen.has(id) ? nr+w(id)<=repQ : nn<newQ);
+  const take=id=>{ used.add(id); unit(id).forEach(x=>list.push(x)); if(wasSeen.has(id)) nr+=w(id); else nn+=w(id); return id; };
+  let cur=first;
+  while(list.length<SIZE){
+    const f=[...new Set(followOf(cur).map(rootOf))].filter(ok);    // 관련 질문 우선
+    if(f.length){ cur=take(f[Math.floor(Math.random()*Math.min(2,f.length))]); continue; }
+    const cn=others.filter(id=>ok(id)&&!wasSeen.has(id)), cr=others.filter(id=>ok(id)&&wasSeen.has(id));
+    if(!cn.length && !cr.length) break;
+    const remN=newQ-nn, remR=repQ-nr;
+    const useNew = cn.length && (!cr.length || Math.random() < remN/(remN+remR));
+    cur=take(useNew ? cn[Math.floor(Math.random()*cn.length)] : pickWeak(cr));
+  }
+  others.filter(id=>!used.has(id)&&list.length+w(id)<=SIZE+1).sort((a,b)=>(wasSeen.has(a)-wasSeen.has(b))||(w(a)-w(b))).forEach(id=>{ if(list.length<SIZE) take(id); });   // 안전장치
+  const cl=others.find(id=>used.has(id)&&qById(id).closing);        // '마지막으로 하고 싶은 말' 같은 마무리 질문은 항상 맨 끝
+  if(cl!=null && list[list.length-1]!==cl){ list.splice(list.indexOf(cl),1); list.push(cl); }
+  return list;
+}
+
+/* ===== 세션 흐름 ===== */
+let setupErr="", view = "dash", prevView="dash", reportN = null, qs = {mode:"ready", att:null, hints:0, typed:false, replays:0}, resetAsk=false, micTest=null, diag=null, flowId=0;
+const freshQs = () => ({mode:"ready", att:null, hints:0, typed:false, replays:0, err:""});
+
+function startSession(){
+  if(!setupOk()){ view="setup"; render(); return; }
+  unlockAudio();
+  if(!S.cur){
+    const n=S.done.length+1;
+    S.cur={n, phase:phaseOf(n), pass:passFor(n), startedAt:Date.now(), queue:buildQueue(n), idx:0, res:{}, recSec:0, greeted:false, empties:0};
+    save();
+  }
+  view="session"; qs=freshQs(); flowId++;
+  render();
+  if(!S.cur.greeted) speakAsync(C.greeting);
+}
+function curQ(){ return qById(S.cur.queue[S.cur.idx]); }
+
+// 질문(음성) → 비프 → 녹음. 읽기: 재생 버튼을 눌렀을 때, 암기: 자동 반복
+async function askAndRecord(q, opt){
+  opt=opt||{};
+  const my=++flowId; unlockAudio(); qs.err=""; qs.diag=false; engErr=""; micNote="";
+  const ok=await armMic(); if(my!==flowId) return;
+  if(!ok){ qs.mode="ready"; qs.err=micAdvice(lastMicErr&&lastMicErr.name); qs.diag=true; render(); return; }
+  if(opt.tts!==false){
+    qs.mode="ask"; render();
+    await speakAsync(q.q); if(my!==flowId) return;
+    await sleep(350); if(my!==flowId) return;       // 스피커 잔향이 사라진 뒤에 인식기를 켬(질문이 답변에 섞이지 않게)
+  }
+  if(SR){
+    qs.mode="prep"; render();
+    const live=await freshEngine(); if(my!==flowId) return;   // 듣는 중임을 확인한 뒤에 비프
+    if(!live){ qs.mode="ready"; qs.err=engErr||micAdvice("network"); qs.diag=true; render(); return; }
+  }
+  qs.mode="beep"; render(); await beep(); if(my!==flowId) return;
+  qs.mode="rec"; render();
+  const memo = S.cur.phase==="memo";
+  startRec(r=>{ if(my===flowId) onAnswer(q,r); }, {silence: memo?SILENCE_MS:SILENCE_MS+2000, noSpeech:NOSPEECH_MS, q:q.q});
+}
+
+function onAnswer(q, r){
+  const cur=S.cur, ph=cur.phase;
+  if(r.err){ qs.mode="ready"; qs.err=r.err; qs.diag=true; render(); return; }
+  const hn=normStr(r.text), empty = hn.length<3;
+  if(empty && ph==="read"){ qs.mode="ready"; qs.err="음성이 인식되지 않았어요. 마이크를 확인하고 조금 더 크게 말해 주세요."; render(); return; }
+  cur.recSec += r.dur;
+  const heard = empty ? "" : r.text;
+  const ev=evaluate(q, heard, ph, cur.pass);
+  const prev=cur.res[q.id] || {tries:0, firstScore:null, hints:0, replays:0};
+  const rate = r.dur>1 ? ev.hLen/r.dur : 0, scriptRate = (ph==="read" && r.dur>2) ? normStr(scriptOf(q)).length/r.dur : 0;
+  const att={...ev, heard, low:r.low, dur:r.dur, typed:qs.typed, noAnswer:empty, rate:Math.round(rate*10)/10, fast:(rate>=8||scriptRate>=9)};
+  const tries=prev.tries+1;
+  const best = (!prev.best || att.score>=prev.best.score) ? att : prev.best;
+  cur.res[q.id]={id:q.id, tries, firstScore: prev.firstScore==null?att.score:prev.firstScore, best, last:att,
+                 hints:(prev.hints||0)+(qs.hints||0), replays:(prev.replays||0)+(qs.replays||0), done:false,
+                 atts:(prev.atts||[]).concat([{score:att.score, bad:att.bad, ops:att.ops.filter(o=>o.t!=="extra"), low:att.low}])};
+  qs.hints=0; qs.replays=0;
+  const res=cur.res[q.id];
+  res.done = ph==="memo" ? true : (best.pass || tries>=MAX_TRIES);
+  res.flagged = !best.pass;
+  qs.att=att; save();
+  if(ph==="memo"){
+    cur.empties = empty ? (cur.empties||0)+1 : 0;
+    qs.mode="saved"; qs.hold = cur.empties>=3; save(); render();
+    if(!qs.hold){ const my=flowId; setTimeout(()=>{ if(my===flowId && view==="session" && S.cur) nextQuestion(); }, 1300); }
+  } else { qs.mode="fb"; render(); }
+}
+
+function nextQuestion(){
+  const cur=S.cur;
+  stopSpeak();
+  if(cur.idx+1>=cur.queue.length){ finishSession(); return; }
+  cur.idx++; cur.empties = cur.empties||0; save(); qs=freshQs();
+  render();
+  if(cur.phase==="memo") askAndRecord(curQ());
+}
+
+function finishSession(){
+  const cur=S.cur;
+  const results=cur.queue.map(id=>{
+    const r=cur.res[id]; const q=qById(id);
+    return {id, q:q.q, script:scriptOf(q), kw:q.kw, tries:r.tries, firstScore:r.firstScore, score:r.best.score, pass:r.best.pass,
+            heard:r.best.heard, ops:r.best.ops, bad:r.best.bad, missKw:r.best.missKw, hitKw:r.best.hitKw, low:r.best.low, hints:r.hints, replays:r.replays||0, atts:r.atts, typed:r.best.typed, noAnswer:!!r.best.noAnswer, flagged:r.flagged};
+  });
+  const rec={n:cur.n, phase:cur.phase, passScore:cur.pass, queue:cur.queue, startedAt:cur.startedAt, endedAt:Date.now(), recSec:Math.round(cur.recSec), results,
+    passCount:results.filter(r=>r.pass).length, total:results.length,
+    avg:Math.round(results.reduce((a,r)=>a+r.score,0)/results.length),
+    hints:results.reduce((a,r)=>a+r.hints,0), replays:results.reduce((a,r)=>a+r.replays,0), typed:results.some(r=>r.typed)};
+  S.done.push(rec); S.cur=null; disarmMic();
+  // 10회차 관문: 평균이 기준 미달이면 6~10회를 다시 진행(1회). 재도전 후에도 미달이면 리포트 우선 제출
+  if(S.done.length>=total()){
+    const okGate = rec.avg>=GATE_SCORE;
+    if(okGate || (S.extra||0)>=MAX_EXTRA_BLOCKS){ rec.gate={avg:rec.avg, passed:okGate, added:false}; }
+    else { S.extra=(S.extra||0)+1; rec.gate={avg:rec.avg, passed:false, added:true}; }
+  }
+  save();
+  reportN=rec.n;
+  view = (S.done.length>=total()) ? "complete" : "report"; render();
+}
+
+/* ===== 마이크 진단 ===== */
+async function runDiag(){
+  diag={items:[], done:false}; if(view!=="diag") prevView=view; view="diag"; render();
+  const add=(lv,t,d)=>{ diag.items.push({lv,t,d}); render(); };
+  const ua=navigator.userAgent;
+  add(location.protocol==="file:"?"warn":"ok","접속 방식: "+location.protocol+"//",
+    location.protocol==="file:"?"파일로 직접 열면 브라우저가 마이크 허용을 기억하지 못해 매번 허용 창이 뜰 수 있어요. 뜨면 '허용'을 누르세요. (https 주소로 올리면 한 번만 허용하면 돼요)":"정상");
+  if(window.top!==window) add("bad","미리보기/삽입 화면 안에서 열려 있어요","이 화면에서는 마이크가 막히는 경우가 많아요. 파일을 Chrome 또는 Edge 새 창에서 직접 여세요.");
+  if(/KAKAOTALK|NAVER\(|Line\/|FBAN|FBAV|Instagram|; wv\)/i.test(ua)) add("bad","앱 안의 브라우저로 열려 있어요","카카오톡/네이버 등 앱 안에서는 음성인식이 안 돼요. Chrome으로 열어 주세요.");
+  if(/Firefox/i.test(ua)) add("bad","Firefox는 음성인식을 지원하지 않아요","Chrome 또는 Edge를 사용하세요.");
+  else if(/iPhone|iPad|iPod/.test(ua)) add("warn","iPhone/iPad는 음성인식이 불안정해요","가능하면 PC 또는 안드로이드의 Chrome을 사용하세요.");
+  add(SR?"ok":"bad","음성인식 기능: "+(SR?"지원":"미지원"), SR?"정상":"이 브라우저는 지원하지 않아요. Chrome 또는 Edge를 사용하세요.");
+  add(window.isSecureContext?"ok":"bad","보안 연결(secure context): "+(window.isSecureContext?"예":"아니요"), window.isSecureContext?"정상":"https 또는 localhost 주소가 아니면 마이크가 막혀요.");
+  try{ if(navigator.permissions){ const p=await navigator.permissions.query({name:"microphone"});
+    add(p.state==="denied"?"bad":p.state==="granted"?"ok":"warn","마이크 권한 상태: "+p.state, p.state==="denied"?micAdvice("NotAllowedError"):p.state==="prompt"?"아직 허용 전이에요. 다음 단계에서 허용 창이 뜨면 '허용'을 누르세요.":"허용됨"); } }catch(e){}
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia) add("bad","마이크 접근 API 없음","보안 연결이 아니거나 오래된 브라우저예요.");
+  else { micOk=false; const ok=await ensureMic();
+    add(ok?"ok":"bad","마이크 열기 테스트: "+(ok?"성공":"실패 ("+(lastMicErr&&lastMicErr.name)+")"), ok?"정상":micAdvice(lastMicErr&&lastMicErr.name)); }
+  const hasJa=!!jaVoice();
+  add(hasJa?"ok":"warn","면접관 일본어 음성: "+(hasJa?"사용 가능":"찾지 못함"), hasJa?"정상":"이 기기에 일본어 음성이 없으면 질문이 소리로 나오지 않아요. (Chrome이면 잠시 후 다시 시도 / 설정에서 일본어 음성 설치)");
+  diag.done=true; render();
+}
+
+/* ===== 리포트(선생님 제출용) ===== */
+function hash(str){ let h=0x811c9dc5; for(let i=0;i<str.length;i++){ h^=str.charCodeAt(i); h=Math.imul(h,0x01000193)>>>0; } return h.toString(36).toUpperCase().padStart(7,"0"); }
+function doneCode(){
+  const base=S.done.map(d=>[d.n,d.startedAt,d.endedAt,d.avg,d.passCount].join(",")).join("|")+C.student;
+  const c=(hash(base)+hash(base.split("").reverse().join(""))).slice(0,8); return c.slice(0,4)+"-"+c.slice(4);
+}
+/* ===== 통계 / 리포트 ===== */
+const avgOf = a => a.length ? Math.round(a.reduce((x,y)=>x+y,0)/a.length) : null;
+const sumQ = q => q.sum || (q.q.length>34 ? q.q.slice(0,34)+"…" : q.q);
+const sumA = q => q.type==="draft" ? (q.asum||"")+" "+(((S.profile.drafts||{})[q.id])?"(학생이 수정함)":"") : q.type==="custom" ? "(학생 작성) "+(S.profile.other||"").slice(0,90) : (q.asum || (scriptOf(q).slice(0,70)+"…"));
+const clip = (s,n) => { s=(s||"").replace(/\s+/g," ").trim(); return s.length>n ? s.slice(0,n)+"…" : s; };
+const stageLabel = d => d.n>BASE_TOTAL ? "재도전" : (d.phase==="read"?"읽기":"암기");
+function lastGate(){ const g=S.done.slice().reverse().find(d=>d.gate); return g ? Object.assign({n:g.n}, g.gate) : null; }
+
+function qStats(){
+  const m={};
+  C.questions.forEach(q=>{ m[q.id]={id:q.id, n:0, scores:[], read:[], memo:[], fail:0, lastHeard:"", lastMemoHeard:"", lowAtt:0, atts:0}; });
+  S.done.forEach(d=>d.results.forEach(r=>{
+    const x=m[r.id]; if(!x) return;
+    x.n++; x.scores.push(r.score); (d.phase==="read"?x.read:x.memo).push(r.score);
+    if(!r.pass) x.fail++;
+    if(r.heard){ x.lastHeard=r.heard; if(d.phase==="memo") x.lastMemoHeard=r.heard; }
+    (r.atts||[]).forEach(a=>{ x.atts++; if(a.low&&a.low.length) x.lowAtt++; });
+  }));
+  return Object.values(m).filter(x=>x.n).map(x=>{
+    x.avg=avgOf(x.scores); x.avgRead=avgOf(x.read); x.avgMemo=avgOf(x.memo);
+    x.key = x.avgMemo!=null ? x.avgMemo : x.avg;            // 암기 점수가 있으면 그것을 기준으로 판정
+    x.level = x.key<LOW_BELOW ? "low" : x.key<HIGH_FROM ? "mid" : "high";
+    return x;
+  });
+}
+
+// 발음/인식 문제: 읽기 단계 시도들에서 반복해서 인식되지 않은 구절, 자주 다르게 들린 말, 인식 신뢰도 낮은 질문
+function pronStats(){
+  const readAtts={}, lowByQ={}, pairs={};
+  S.done.forEach(d=>d.results.forEach(r=>{
+    (r.atts||[]).forEach(a=>{
+      const l=(lowByQ[r.id]=lowByQ[r.id]||{n:0,low:0}); l.n++; if(a.low&&a.low.length) l.low++;
+      if(d.phase==="read"){ const e=(readAtts[r.id]=readAtts[r.id]||{script:r.script,list:[]}); e.script=r.script; e.list.push(a); }
+    });
+  }));
+  const phrases=[];
+  Object.keys(readAtts).forEach(id=>{
+    const {script,list}=readAtts[id], n=list.length, cnt=new Array(script.length).fill(0);
+    list.forEach(a=>(a.bad||[]).forEach(i=>{ if(i<cnt.length) cnt[i]++; }));
+    const thr = n>=2 ? Math.max(2,Math.ceil(n*0.5)) : 1;
+    let run="", minHit=0;
+    // 구두점(、。)에서 끊고, 20자를 넘는 긴 덩어리는 '발음'이 아니라 건너뛰었거나 끝까지 읽지 않은 부분으로 보고 제외
+    const flush=()=>{ const L=run.length; if(L>=2 && L<=20) phrases.push({id:+id, text:run, hits:minHit, n}); run=""; minHit=0; };
+    for(let i=0;i<script.length;i++){
+      const ch=script[i], isL=/[\p{L}\p{N}]/u.test(ch);
+      if(isL){ if(cnt[i]>=thr){ run+=ch; minHit=minHit?Math.min(minHit,cnt[i]):cnt[i]; } else flush(); }
+      else flush();
+    }
+    flush();
+    list.forEach(a=>(a.ops||[]).forEach(o=>{
+      if(o.t==="sub" && o.s.length<=8 && o.h.length<=8){ const k=o.s+"→"+o.h; const p=(pairs[k]=pairs[k]||{s:o.s,h:o.h,c:0,ids:new Set()}); p.c++; p.ids.add(+id); }
+    }));
+  });
+  phrases.sort((a,b)=>b.hits-a.hits || b.hits/b.n-a.hits/a.n);
+  const pairList=Object.values(pairs).sort((a,b)=>b.c-a.c).filter((p,i)=>p.c>=2||i<5).slice(0,8).map(p=>({...p,ids:[...p.ids].sort((a,b)=>a-b)}));
+  const lowQ=Object.keys(lowByQ).map(id=>({id:+id, ...lowByQ[id], rate:lowByQ[id].low/lowByQ[id].n})).filter(x=>x.low>0&&x.rate>=0.4).sort((a,b)=>b.rate-a.rate||b.low-a.low).slice(0,6);
+  return {phrases:phrases.slice(0,12), pairs:pairList, lowQ};
+}
+function buildReport(){
+  const all=qStats(), by=a=>a.slice().sort((x,y)=>x.key-y.key);
+  return {qs:all, low:by(all.filter(x=>x.level==="low")), mid:by(all.filter(x=>x.level==="mid")), high:by(all.filter(x=>x.level==="high")).reverse(),
+          pron:pronStats(), lg:lastGate(), finished:S.done.length>=total()};
+}
+function gateText(g){
+  if(!g) return "진행 중 (최종 관문: "+BASE_TOTAL+"회차 평균 "+GATE_SCORE+"점)";
+  if(g.passed) return BASE_TOTAL+"회차 관문 통과 — 평균 "+g.avg+"점 (기준 "+GATE_SCORE+"점)";
+  if(g.added) return BASE_TOTAL+"회차 평균 "+g.avg+"점으로 기준("+GATE_SCORE+"점) 미달 → 6~10회 재도전 진행";
+  return "⚠ 재도전 후에도 평균 "+g.avg+"점으로 기준("+GATE_SCORE+"점) 미달 — 리포트 우선 제출";
+}
+
+function reportText(){
+  const R=buildReport(), L=[];
+  L.push("【"+C.school+" 모의면접 훈련 리포트】");
+  L.push("학생: "+C.student+"  /  작성: "+new Date().toLocaleString("ko-KR")+"  /  확인코드: "+doneCode());
+  L.push("진행: "+S.done.length+"/"+total()+"회"+(S.extra?" (10회차 기준 미달로 6~10회 재도전 포함)":"")+"  |  "+gateText(R.lg));
+  L.push("");
+  L.push("■ 회차별 결과");
+  S.done.forEach(d=>L.push(" "+d.n+"회 ["+stageLabel(d)+"] 기준 "+d.passScore+"점 | 통과 "+d.passCount+"/"+d.total+" | 평균 "+d.avg+"점 | "+fmtDT(d.startedAt)+" | 말한 시간 "+fmtDur(d.recSec)+(d.hints?" | 힌트 "+d.hints:"")+(d.replays?" | 질문 다시듣기 "+d.replays:"")+(d.typed?" | 타이핑 입력 포함":"")));
+  const sec=(title,arr,withHeard)=>{
+    L.push(""); L.push("■ "+title+" ("+arr.length+"개)");
+    if(!arr.length) L.push(" - 해당 없음");
+    arr.forEach(x=>{ const q=qById(x.id);
+      L.push(" - Q"+x.id+" "+sumQ(q)+" — 평균 "+x.key+"점 (읽기 "+(x.avgRead==null?"-":x.avgRead)+" / 암기 "+(x.avgMemo==null?"-":x.avgMemo)+") · 출제 "+x.n+"회 · 미통과 "+x.fail+"회");
+      L.push("     답변 요약: "+sumA(q));
+      if(withHeard && (x.lastMemoHeard||x.lastHeard)) L.push("     내 최근 답변(인식): "+clip(x.lastMemoHeard||x.lastHeard,90));
+    });
+  };
+  sec("취약 질문 — 암기 기준 평균 "+LOW_BELOW+"점 미만, 집중 연습 필요", R.low, true);
+  sec("보통 질문 — "+LOW_BELOW+"~"+(HIGH_FROM-1)+"점", R.mid, true);
+  L.push(""); L.push("■ 우수 질문 — "+HIGH_FROM+"점 이상 ("+R.high.length+"개)");
+  if(!R.high.length) L.push(" - 해당 없음");
+  R.high.forEach(x=>L.push(" - Q"+x.id+" "+sumQ(qById(x.id))+" — 평균 "+x.key+"점 · 출제 "+x.n+"회"));
+  L.push(""); L.push("■ 발음·인식 집중 교정 (음성인식 기반 추정 — 참고용, 신뢰도 약 50%)");
+  const P=R.pron;
+  L.push(" 1) 반복해서 인식되지 않은 구절 (대본을 읽을 때)");
+  if(!P.phrases.length) L.push("    - 뚜렷한 반복 구절 없음");
+  P.phrases.forEach(p=>L.push("    - Q"+p.id+" 「"+p.text+"」 — "+p.n+"회 중 "+p.hits+"회 인식 안 됨"));
+  L.push(" 2) 자주 다르게 들린 말 (대본 → 인식)");
+  if(!P.pairs.length) L.push("    - 해당 없음");
+  P.pairs.forEach(p=>L.push("    - 「"+p.s+"」 → 「"+p.h+"」 "+p.c+"회 (Q"+p.ids.join(", Q")+")"));
+  L.push(" 3) 인식 신뢰도가 자주 낮았던 질문 (발음이 또렷하지 않았을 가능성)");
+  if(!P.lowQ.length) L.push("    - 해당 없음");
+  P.lowQ.forEach(x=>L.push("    - Q"+x.id+" "+sumQ(qById(x.id))+" — "+x.n+"회 중 "+x.low+"회"));
+  L.push("    ※ 음성인식 결과라 발음이 맞아도 표시될 수 있어요. 실제 발음은 모의면접에서 직접 확인해 주세요.");
+  L.push(""); L.push("■ 질문별 전체 현황 (질문 요약 / 답변 요약)");
+  R.qs.slice().sort((a,b)=>a.id-b.id).forEach(x=>{ const q=qById(x.id);
+    L.push(" Q"+x.id+" ["+(x.level==="low"?"취약":x.level==="mid"?"보통":"우수")+" "+x.key+"점·"+x.n+"회] "+sumQ(q));
+    L.push("     → "+sumA(q)); });
+  return L.join("\n");
+}
+function teacherMsg(){
+  const R=buildReport(), g=R.lg, L=[];
+  L.push(C.teacher+", "+C.student+" 학생입니다.");
+  L.push(C.school+" 면접 훈련을 "+S.done.length+"회 마쳤습니다. (확인코드 "+doneCode()+")");
+  if(g) L.push(g.passed ? BASE_TOTAL+"회차 평균 "+g.avg+"점으로 기준("+GATE_SCORE+"점)을 넘었습니다."
+                         : (g.added ? BASE_TOTAL+"회차 평균 "+g.avg+"점으로 기준("+GATE_SCORE+"점)에 못 미쳐 6~10회를 다시 진행 중입니다."
+                                    : "재도전까지 마쳤지만 평균 "+g.avg+"점으로 기준("+GATE_SCORE+"점)은 넘지 못했습니다. 리포트를 먼저 제출합니다."));
+  const w=R.low.slice(0,3); if(w.length) L.push("특히 어려웠던 질문: "+w.map(x=>"Q"+x.id+" "+sumQ(qById(x.id))).join(" / "));
+  L.push(g&&g.passed ? "실전 모의면접 일정을 잡고 싶습니다. 가능한 일시를 알려 주세요." : "리포트를 확인해 주시고, 보충 연습 방법과 모의면접 일정을 알려 주세요.");
+  return L.join("\n");
+}
+
+function download(name, text){
+  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([text],{type:"text/plain;charset=utf-8"}));
+  a.download=name; document.body.appendChild(a); a.click(); a.remove();
+}
+async function copy(text, btn){
+  try{ await navigator.clipboard.writeText(text); }catch(e){
+    const t=document.createElement("textarea"); t.value=text; document.body.appendChild(t); t.select(); try{document.execCommand("copy");}catch(_){} t.remove(); }
+  if(btn){ const o=btn.textContent; btn.textContent="복사됨 ✓"; setTimeout(()=>btn.textContent=o,1500); }
+}
+
+/* ===== 화면 ===== */
+function dday(){
+  if(!C.examDate) return "";
+  const d=Math.ceil((new Date(C.examDate+"T00:00:00+09:00")-Date.now())/86400000);
+  if(d<0) return "";
+  return '<div class="dday"><span class="small">실전 면접까지</span><b>'+(d===0?"D-DAY":"D-"+d)+'</b></div>';
+}
+function viewDash(){
+  const nDone=S.done.length, cur=S.cur;
+  const nextN = cur? cur.n : nDone+1;
+  const steps=[...Array(total())].map((_,i)=>{ const n=i+1; const cls = n<=nDone?"done": (n===nextN&&nDone<total()?"now":"");
+    return '<div><div class="step '+cls+'">'+(n<=nDone?"✓":n)+'</div><div class="step-lab">'+(n<=READ_SESSIONS?"읽기":n>BASE_TOTAL?"재도전":"암기")+'<br>'+passFor(n)+'점</div></div>'; }).join("");
+  const passed=S.done.reduce((a,d)=>a+d.passCount,0), tot=S.done.reduce((a,d)=>a+d.total,0);
+  const avg=nDone? Math.round(S.done.reduce((a,d)=>a+d.avg,0)/nDone) : "-";
+  const sec=S.done.reduce((a,d)=>a+d.recSec,0);
+  let action="";
+  if(nDone>=total()){
+    const lg=lastGate();
+    action='<div class="'+(lg&&lg.passed?'ok-box':'notice')+'"><b>'+(lg&&lg.passed?'🎉 훈련 완료! 실전 모의면접 준비가 끝났어요.':'📝 훈련 완료! 기준 점수에는 못 미쳤지만 리포트를 먼저 제출하세요.')+'</b></div><div style="margin-top:12px"><button class="btn primary big" data-act="open-complete">'+esc(C.teacher)+'에게 제출할 화면 열기</button></div>';
+  } else {
+    const ph=phaseOf(nextN);
+    action='<div class="row"><span class="badge '+ph+'">'+(ph==="read"?"대본 보고 읽기":"음성만 듣고 답하기")+'</span><b style="font-size:18px">'+nextN+'회차 훈련</b></div>'
+      +'<p class="muted" style="margin:8px 0 14px">'+(ph==="read"
+        ? "▶ 버튼을 누르면 면접관이 일본어로 질문하고, \"삐—\" 소리 뒤에 녹음이 시작돼요. 대본을 보면서 또박또박 읽으세요. 질문 하나가 끝날 때마다 틀린 부분을 바로 알려드려요. 이번 회차 통과 점수("+passFor(nextN)+"점)를 넘어야 다음 질문으로 갈 수 있어요."
+        : "질문이 <b>소리로만</b> 나와요. 첫 질문만 시작 버튼을 누르면, 이후에는 \"삐—\" 소리 뒤에 답하고 <b>답변이 끝나면 자동으로 다음 질문</b>으로 넘어가요. 대사를 그대로 외우지 않아도 의미가 맞으면 정답이에요. 피드백은 모든 질문이 끝난 뒤에 한꺼번에 보여드려요. (질문별 통과 기준 "+passFor(nextN)+"점)")
+      +' 이번 회차는 질문 '+SESSION_SIZE+'개 — <b>모두 끝내야</b> 1회로 인정돼요.</p>'
+      +'<button class="btn primary big" data-act="start">'+(cur?"이어서 하기 ("+(cur.idx+1)+"/"+cur.queue.length+")":"훈련 시작")+'</button>';
+  }
+  const weak = nDone? qStats().filter(x=>x.key<HIGH_FROM).sort((a,b)=>a.key-b.key).slice(0,5).map(x=>({id:x.id,q:sumQ(qById(x.id)),avg:x.key})) : [];
+  const hist = S.done.slice().reverse().map(d=>'<tr><td>'+d.n+'회</td><td><span class="badge '+d.phase+'">'+(d.phase==="read"?"읽기":"암기")+'</span></td><td>'+fmtDT(d.startedAt)+'</td><td>'+d.passCount+'/'+d.total+'</td><td>'+d.avg+'점</td><td>'+fmtDur(d.recSec)+'</td><td><button class="btn ghost" data-act="open-report" data-n="'+d.n+'">보기</button></td></tr>').join("");
+  return ''
+  +'<div class="card hero"><div class="row"><div class="grow"><div class="muted small">'+esc(C.school)+'</div><h1>'+esc(C.student)+' 학생 면접 훈련</h1><div class="muted small" style="margin-top:6px">'+esc(C.info)+'</div></div>'+dday()+'</div></div>'
+  +(SR?'':'<div class="notice" style="margin-bottom:16px">⚠ 이 브라우저는 음성인식을 지원하지 않아요. <b>PC·안드로이드의 Chrome 또는 Edge</b>로 열어 주세요. (지금은 타이핑으로만 진행되고 선생님 리포트에 표시돼요)</div>')
+  +'<div class="card"><h3 style="margin-bottom:14px">훈련 진행 현황 <span class="muted small">'+nDone+' / '+total()+'회 완료</span></h3><div class="steps" style="grid-template-columns:repeat('+Math.min(total(),10)+',1fr)">'+steps+'</div></div>'
+  +(S.extra&&nDone<total()?'<div class="notice" style="margin-bottom:16px">10회차 평균 점수가 기준('+GATE_SCORE+'점)에 못 미쳐 <b>6~10회 과정을 한 번 더</b> 진행해요. (11~15회차, 기준 점수는 6~10회차와 같아요) 다시 마친 뒤에는 점수와 관계없이 리포트를 '+esc(C.teacher)+'께 제출해요.</div>':'')+'<div class="card">'+action+'</div>'
+  +'<div class="card"><div class="grid3">'
+    +'<div class="stat"><b>'+nDone+'회</b><span class="small muted">완료한 훈련</span></div>'
+    +'<div class="stat"><b>'+passed+'<span class="small muted"> /'+tot+'</span></b><span class="small muted">통과한 답변</span></div>'
+    +'<div class="stat"><b>'+avg+(avg==="-"?"":"점")+'</b><span class="small muted">평균 점수</span></div>'
+    +'<div class="stat"><b>'+Math.round(sec/60)+'분</b><span class="small muted">말한 시간</span></div></div></div>'
+  +(weak.length?'<div class="card"><h3 style="margin-bottom:10px">더 연습이 필요한 질문</h3>'+weak.map(w=>'<div class="row" style="padding:6px 0;border-bottom:1px solid var(--line)"><span class="badge ng">'+w.avg+'점</span><span class="grow">Q'+w.id+'. '+esc(w.q)+'</span></div>').join("")+'</div>':'')
+  +(nDone&&nDone<total()?'<div class="row" style="margin-bottom:16px"><button class="btn" data-act="open-complete">📊 중간 리포트 보기</button></div>':'')+(nDone?'<div class="card"><h3 style="margin-bottom:10px">훈련 기록</h3><table><tr><th>회차</th><th>단계</th><th>일시</th><th>통과</th><th>평균</th><th>시간</th><th></th></tr>'+hist+'</table></div>':'')
+  +'<div class="card"><h3 style="margin-bottom:8px">온라인 면접에서 쓸 수 있는 표현</h3>'+C.phrases.map(p=>'<div style="padding:4px 0">・'+esc(p)+'</div>').join("")+'</div>'
+  +'<div class="row small muted" style="justify-content:space-between"><span>기록은 이 기기의 이 브라우저에만 저장돼요. (브라우저 데이터를 지우면 사라져요)</span>'
+  +'<span><button class="btn ghost small" data-act="diag">마이크 진단</button><button class="btn ghost small" data-act="setup">설정</button>'
+  +(resetAsk?'<button class="btn ghost small" style="color:var(--red)" data-act="reset-do">정말 초기화</button><button class="btn ghost small" data-act="reset-no">취소</button>':'<button class="btn ghost small" data-act="reset-ask">기록 초기화</button>')+'</span></div>';
+}
+
+function viewSetup(){
+  return '<div class="card"><h2>시작하기 전에</h2><p class="muted">훈련에 필요한 정보를 입력해 주세요. 나중에 설정에서 바꿀 수 있어요.</p>'
+  +(needsGrade?'<label>일본 초등학교는 몇 학년까지 다녔나요? <span class="muted small">(질문 "日本の学校には通っていましたか"의 답변에 들어가요)</span></label><select id="f-grade"><option value="">선택하세요</option>'
+     +[1,2,3,4,5,6].map(n=>'<option value="'+n+'"'+(S.profile.grade==n?" selected":"")+'>'+n+'학년 (小学校'+n+'年生まで)</option>').join("")+'</select>':'')
+  +(needsOther?(()=>{const q=C.questions.find(q=>q.type==="custom"); return '<label>Q'+q.id+'. '+esc(q.q)+' — 내 답변 (일본어)</label><div class="notice small" style="margin-bottom:8px">'+(q.optional?'<b>(선택)</b> 시험 당일 직후에 작성해도 돼요. 비워 두면 이 질문은 연습에서 제외돼요.<br>':'')+esc(q.guide)+'<br>'+esc(q.example||'예) 第一志望は立命館大学デザイン・アート学部です。ほかには（　）に出願していますが、いちばん入りたいのはこちらです。（※ 사실대로 쓰세요)')+'</div><textarea id="f-other" rows="4" placeholder="일본어로 2~3문장">'+esc(S.profile.other||"")+'</textarea><div class="small muted">선생님께 꼭 확인받으세요. 이 문장이 대본이 됩니다.</div>';})():'')
+  +(drafts.length?'<div class="card" style="margin-top:14px;background:#fffaf0"><h3 style="margin:0 0 6px">내 경험으로 고쳐 쓰는 답변 ('+drafts.length+'개)</h3><div class="small muted" style="margin-bottom:8px">아래 답변은 <b>예시</b>예요. 실제로 본 것·읽은 것·계획에 맞게 일본어로 고쳐 쓰고, 꼭 선생님께 확인받으세요. 고친 문장이 그대로 연습 대본이 돼요. 예시와 사실이 같다면 그대로 두어도 됩니다.</div>'
+    +drafts.map(q=>'<label>Q'+q.id+'. '+esc(q.q.replace(/^↳\s*/,''))+'</label><div class="notice small" style="margin:4px 0">'+esc(q.note||'')+'</div><textarea class="f-draft" data-id="'+q.id+'" rows="5">'+esc(scriptOf(q))+'</textarea>').join("")+'</div>':'')
+  +(location.protocol==="file:"?'<div class="notice small" style="margin-top:14px">⚠ 이 파일을 <b>파일(file://)</b>로 직접 열면 브라우저가 마이크 허용을 기억하지 못해 허용 창이 자주 뜰 수 있어요. 선생님이 이 파일을 https 주소(GitHub Pages·Netlify 등)로 올려 링크로 배포하면 <b>한 번만 허용</b>하면 됩니다.</div>':'')
+  +voiceWidget()
+  +'<label>마이크 테스트</label>'+micWidget()+'<div style="margin-top:8px"><button class="btn small" data-act="diag">마이크가 안 될 때: 진단하기</button></div>'
+  +(setupErr?'<div class="notice" style="margin-top:14px">'+esc(setupErr)+'</div>':'')+'<div class="row" style="margin-top:22px"><button class="btn primary" data-act="setup-save">저장하고 계속</button><button class="btn ghost" data-act="go-dash">취소</button></div></div>';
+}
+
+function voiceWidget(){
+  const L=jaVoices(); if(!L.length) return '<label>면접관 목소리</label><div class="muted small">이 브라우저에는 일본어 음성이 없어요. Chrome(PC) 또는 Edge 사용을 권장합니다.</div>';
+  const cur=pickVoice();
+  return '<label>면접관 목소리 <span class="muted small">(어색하면 다른 음성을 골라 들어보세요. 자연스러운 음성: Nanami·Keita·Google·Kyoko 등)</span></label><div class="row"><select id="f-voice" style="flex:1">'
+   +L.map(v=>'<option value="'+esc(v.name)+'"'+(cur&&cur.name===v.name?" selected":"")+'>'+esc(v.name)+(voiceScore(v)<0?" (비추천)":"")+'</option>').join("")
+   +'</select><button class="btn small" data-act="voice-test">🔊 들어보기</button></div>';
+}
+function micWidget(){
+  if(!SR) return '<div class="notice">음성인식 미지원 브라우저입니다.</div>';
+  return '<div class="row"><button class="btn" data-act="mic-test">'+(micTest&&micTest.on?"■ 중지":"🎤 음성인식 테스트 (こんにちは)")+'</button><span id="mic-out" class="muted">'+esc(micTest&&micTest.text||"")+'</span></div>';
+}
+function viewDiag(){
+  const ic={ok:"✅",warn:"⚠️",bad:"❌"};
+  return '<div class="card"><div class="row"><h2 class="grow">마이크 진단</h2><button class="btn" data-act="diag-back">돌아가기</button></div>'
+    +'<p class="muted">마이크/음성인식이 안 될 때 원인을 찾아드려요. ❌ 항목부터 해결하세요.</p>'
+    +diag.items.map(i=>'<div style="padding:10px 0;border-bottom:1px solid var(--line)">'+ic[i.lv]+' <b>'+esc(i.t)+'</b><div class="muted small" style="margin-left:26px">'+esc(i.d)+'</div></div>').join("")
+    +(diag.done?'':'<div class="muted" style="padding:10px 0">검사 중… (마이크 허용 창이 뜨면 "허용"을 눌러 주세요)</div>')
+    +(diag.done?'<div style="margin-top:16px"><b>마지막 단계 — 실제 인식 테스트</b><div style="margin-top:8px">'+micWidget()+'</div></div>':'')
+    +'<div class="row" style="margin-top:16px"><button class="btn" data-act="diag">다시 검사</button></div></div>';
+}
+function viewSession(){
+  const cur=S.cur, ph=cur.phase, total_=cur.queue.length, memo=ph==="memo";
+  const head='<div class="card"><div class="row"><span class="badge '+ph+'">'+cur.n+'회차 · '+(memo?"음성만 듣고 답하기":"대본 보고 읽기")+' · 통과 기준 '+cur.pass+'점</span><span class="grow"></span>'
+    +'<label style="margin:0;font-weight:600;font-size:13px"><input type="checkbox" id="tts" '+(ttsOn?"checked":"")+' style="width:auto"> 면접관 음성</label>'
+    +'<button class="btn ghost" data-act="pause">잠시 멈추고 나가기</button></div>'
+    +'<div class="bar" style="margin-top:12px"><i style="width:'+Math.round((cur.greeted?cur.idx:0)/total_*100)+'%"></i></div>'
+    +'<div class="small muted" style="margin-top:4px">'+(cur.greeted?"질문 "+(cur.idx+1)+" / "+total_:"면접 시작 전 인사")+'</div>'
+    +'<div class="row" style="margin-top:8px;gap:8px"><span class="small muted">🎤 '+esc(micName||"마이크")+'</span><span style="display:inline-block;width:90px;height:8px;background:#e4e7ec;border-radius:4px;overflow:hidden"><i id="lvl" style="display:block;height:100%;width:0;background:#12b76a"></i></span><button class="btn ghost small" data-act="mic-reset">🎤 마이크 다시 인식</button></div>'
+    +(micNote?'<div class="small" style="margin-top:6px;color:#475467">'+esc(micNote)+'</div>':'')+'</div>';
+  if(!cur.greeted){
+    return head+'<div class="card"><div class="qbox"><div class="small muted">面接官</div><div class="q">'+esc(C.greeting)+'</div></div>'
+      +'<p class="muted">마이크와 화면을 확인했다고 대답하고, 수험번호와 이름을 말하는 연습을 해 보세요. (이 부분은 채점하지 않아요)</p>'
+      +(memo?'<div class="notice">이번 회차는 <b>질문이 소리로만</b> 나와요. 첫 질문을 시작하면 이후에는 <b>답변이 끝날 때마다 자동으로 다음 질문</b>으로 넘어가요. 질문 뒤 "삐—" 소리가 나면 답변을 시작하세요.</div>':'')
+      +'<div class="row" style="margin-top:12px"><button class="btn" data-act="replay">🔊 다시 듣기</button><button class="btn primary big" data-act="greet-next">면접 시작 →</button></div></div>';
+  }
+  const q=curQ(), script=scriptOf(q), r=cur.res[q.id], m=qs.mode;
+  const noVoice = !ttsReady();
+  let body='<div class="card">';
+  if(!memo || noVoice){
+    body+='<div class="qbox"><div class="small muted">面接官 · Q'+q.id+'</div><div class="q">'+esc(q.q)+'</div></div>';
+    if(memo&&noVoice) body+='<div class="notice" style="margin-top:10px">이 기기에 일본어 음성이 없거나 꺼져 있어서 질문을 글자로 보여드려요.</div>';
+  } else {
+    body+='<div class="qbox"><div class="small muted">面接官 · Q'+q.id+'</div><div class="q" style="font-size:19px">🎧 질문은 소리로만 나와요. 잘 듣고 답해 주세요.</div></div>';
+  }
+  if(!memo){
+    body+='<div class="small muted" style="margin:14px 0 6px">📖 대본 — 소리 내어 읽어 주세요'+(r&&r.tries?' <span class="badge ng">'+r.tries+'/'+MAX_TRIES+'회 시도</span>':'')+'</div><div class="script">'+(m==="fb"&&qs.att?scriptHtml(script,qs.att.bad):esc(script))+'</div>';
+  }
+  if(qs.err) body+='<div class="notice" style="margin-top:12px">'+esc(qs.err)+(qs.diag?' <button class="btn small" style="margin-left:6px" data-act="diag">마이크 진단</button>':'')+'</div>';
+  const replayBtn = memo&&qs.replays<1 ? '<button class="btn" data-act="replay-mid">🔁 질문 다시 듣기 (1회)</button>' : '';
+  if(m==="ready"){
+    if(SR){
+      body+='<div class="row" style="margin-top:16px"><button class="btn primary big" data-act="play">▶ '+(memo?(cur.idx===0&&!r?"첫 질문 시작":"이어서 시작"):"질문 듣고 답하기")+'</button></div>'
+        +'<div class="small muted" style="margin-top:8px">'+(memo?"질문이 끝나고 \"삐—\" 소리가 나면 답변을 시작하세요. 답변이 끝나면(말이 약 "+Math.round(SILENCE_MS/1000)+"초 끊기면) 자동으로 기록되고 다음 질문으로 넘어가요.":"누르면 면접관이 일본어로 질문하고, \"삐—\" 소리 뒤에 녹음이 시작돼요. 다 읽으면 '답변 끝'을 누르세요.")+'</div>';
+    } else {
+      body+='<div style="margin-top:14px"><label>답변 입력 (음성인식 미지원 — 타이핑 모드)</label><textarea id="typed" rows="4"></textarea><div class="row" style="margin-top:10px"><button class="btn" data-act="replay-q">🔊 질문 듣기</button><button class="btn primary" data-act="type-submit">제출</button></div></div>';
+    }
+  } else if(m==="ask"){
+    body+='<div class="live" id="live">🎧 면접관이 질문하는 중이에요…</div><div class="row">'+replayBtn+'</div>';
+  } else if(m==="prep"){
+    body+='<div class="live" id="live">🎙 마이크 준비 중이에요… (허용 창이 뜨면 \'허용\'을 눌러 주세요. 잠시 기다리면 \"삐—\" 소리가 나요)</div>';
+  } else if(m==="beep"){
+    body+='<div class="live" id="live">🔔 삐—</div>';
+  } else if(m==="rec"){
+    body+='<div class="live" id="live"><span class="recdot"></span>듣고 있어요… 지금 답변하세요</div><div class="row"><button class="btn primary big" data-act="rec-stop">■ 답변 끝</button>'+replayBtn+'<span class="muted" id="timer">0초</span></div>'
+      +'<div class="small muted" style="margin-top:6px">말이 약 '+Math.round((memo?SILENCE_MS:SILENCE_MS+2000)/1000)+'초 끊기면, 또는 삐 소리 뒤 '+Math.round(NOSPEECH_MS/1000)+'초 동안 말이 없으면 자동으로 끝나요.</div>';
+  } else if(m==="saved"){
+    const a=qs.att;
+    body+='<div class="ok-box" style="margin-top:16px">'+(a.noAnswer?'⚠ 답변이 인식되지 않아 "무응답"으로 기록됐어요.':'✔ 답변이 기록됐어요 ('+Math.round(a.dur)+'초).')+' 피드백은 모든 질문이 끝난 뒤에 보여드려요.'+(qs.hold?'':' 다음 질문으로 넘어가는 중…')+'</div>'
+      +(qs.hold?'<div class="notice" style="margin-top:10px">답변이 연속으로 인식되지 않았어요. 마이크를 확인한 뒤 계속하세요.</div><div class="row" style="margin-top:12px"><button class="btn" data-act="diag">마이크 진단</button><button class="btn primary big" data-act="next">계속 ▶</button></div>':'');
+  } else if(m==="fb"){
+    const a=qs.att, ok=a.pass, exhausted = r.tries>=MAX_TRIES && !ok;
+    body+='<div class="row" style="margin:16px 0"><div class="ring" style="--p:'+a.score+';--c:'+(ok?"var(--green)":"var(--red)")+'"><span>'+a.score+'</span></div>'
+      +'<div class="grow"><span class="badge '+(ok?"ok":"ng")+'">'+(ok?"통과!":"조금 더 연습해요")+'</span><div style="margin-top:6px" class="muted">'+(ok?"잘 읽었어요. 빨간 부분이 있다면 한 번 더 확인해 보세요.":"빨간 표시 부분을 고쳐서 다시 읽어 보세요. (통과 "+cur.pass+"점)")+'</div></div></div>';
+    body+=feedbackBlock(a);
+    body+='<div class="row" style="margin-top:12px">'
+      +(ok?'':'<button class="btn rec" data-act="retry">↻ 다시 읽기 (삐 소리 후 시작)</button>')
+      +((ok||exhausted)?'<button class="btn primary big" data-act="next">'+(exhausted?"미통과로 기록하고 다음 →":"다음 질문 →")+'</button>':'')+'</div>';
+  }
+  return head+body+'</div>';
+}
+function feedbackBlock(a){
+  let h="";
+  if(a.fast) h+='<div class="notice" style="margin-bottom:10px">⚡ 말이 빠른 편이에요(초당 약 '+a.rate+'자). 빠르게 이어 말하면 음성인식이 따라오지 못해 단어가 빠질 수 있어요. 문장이 끝날 때마다 한 박자 쉬면서 또박또박 말해 보세요. <span class="small">(참고용 추정)</span></div>';
+  if(a.ops.length){
+    h+='<div style="margin-top:8px"><b>대본과 달랐던 부분</b><ul class="diff">'+a.ops.map(o=>
+      o.t==="miss"?'<li><span class="tag miss">빠짐</span>「'+esc(o.s)+'」'
+      :o.t==="sub"?'<li><span class="tag sub">다르게 들림</span>대본 「'+esc(o.s)+'」 → 인식 「'+esc(o.h)+'」'
+      :'<li><span class="tag extra">추가</span>대본에 없는 말 「'+esc(o.h)+'」').join("")+'</ul></div>';
+  } else h+='<div class="ok-box">대본과 완전히 일치했어요!</div>';
+  if(a.low&&a.low.length) h+='<div style="margin-top:8px"><b>발음이 또렷하지 않게 들린 구간</b> <span class="small muted">(인식 신뢰도 낮음)</span><ul class="diff">'+a.low.map(t=>'<li>「'+esc(t)+'」</li>').join("")+'</ul></div>';
+  h+='<div class="small muted">※ 음성인식 기준이라 발음이 맞아도 표시될 수 있어요. 헷갈리면 선생님께 확인하세요.</div>';
+  return h;
+}
+
+function reportCard(r,i){
+  const ok=r.pass;
+  let inner='<div class="small muted" style="margin:8px 0 4px">내 답변(인식 결과)</div><div class="script" style="font-size:16px;line-height:1.8">'+esc(r.heard||'(무응답)')+'</div>'
+    +'<div class="small muted" style="margin:10px 0 4px">대본'+(r.bad&&r.bad.length?' (빨간색 = 인식 안 됨/다르게 말한 부분)':'')+'</div><div class="script" style="font-size:16px;line-height:1.8">'+scriptHtml(r.script,r.bad)+'</div>';
+  if(r.kw&&r.kw.length&&(r.missKw||r.hitKw)) inner+='<div style="margin-top:10px"><b>핵심어</b> '+(r.hitKw||[]).map(k=>'<span class="chip hit">'+esc(k)+'</span>').join("")+(r.missKw||[]).map(k=>'<span class="chip miss">'+esc(k)+' ✕</span>').join("")+'</div>';
+  inner+=feedbackBlock(r);
+  return '<details '+(!ok?'open':'')+'><summary><span class="badge '+(ok?"ok":"ng")+'">'+r.score+'점</span> Q'+r.id+'. '+esc(r.q)
+    +(r.tries>1?' <span class="muted small">('+r.tries+'회 시도)</span>':'')+(r.hints?' <span class="muted small">(힌트 '+r.hints+')</span>':'')+(r.replays?' <span class="muted small">(질문 다시 듣기 '+r.replays+')</span>':'')+'</summary>'+inner+'</details>';
+}
+function viewReport(n){
+  const d=S.done.find(x=>x.n===n); if(!d) return viewDash();
+  const bad=d.results.filter(r=>!r.pass);
+  return '<div class="card"><div class="row"><span class="badge '+d.phase+'">'+d.n+'회차 결과</span><span class="grow"></span><button class="btn" data-act="go-dash">대시보드로</button></div>'
+    +'<h2 style="margin:12px 0">'+(d.passCount===d.total?"모든 답변 통과! 🎉":d.passCount+" / "+d.total+" 통과")+' · 평균 '+d.avg+'점 <span class="muted small">(통과 기준 '+d.passScore+'점)</span></h2>'
+    +(d.gate?(d.gate.added?'<div class="notice" style="margin-top:12px">📌 '+d.n+'회차 평균 '+d.gate.avg+'점 — 기준 '+GATE_SCORE+'점 미달이라 <b>6~10회 과정을 한 번 더</b> 진행해요. ('+(d.n+1)+'~'+(d.n+BLOCK)+'회차)</div>':'<div class="'+(d.gate.passed?'ok-box':'notice')+'" style="margin-top:12px">'+(d.gate.passed?'✔ 기준 점수('+GATE_SCORE+'점)를 넘었어요!':'⚠ 재도전 후에도 기준 점수('+GATE_SCORE+'점)에 못 미쳤어요. 리포트를 선생님께 제출하세요.')+'</div>'):'')
+    +'<div class="muted small">녹음 시간 '+fmtDur(d.recSec)+(d.hints?' · 힌트 '+d.hints+'회':'')+'</div>'
+    +(d.n<total()&&S.done.length===d.n?'<div style="margin-top:14px"><button class="btn primary big" data-act="start">다음 훈련 ('+(d.n+1)+'회차) →</button></div>':'')+'</div>'
+    +(bad.length?'<div class="card"><h3 style="margin-bottom:6px">다시 확인할 질문 ('+bad.length+')</h3><div class="muted small">다음 훈련 전에 아래 질문의 대본을 한 번 더 읽어 보세요.</div></div>':'')
+    +d.results.slice().sort((a,b)=>a.pass-b.pass||a.score-b.score).map(reportCard).join("");
+}
+function lvBadge(l){ return l==="low"?'<span class="badge ng">취약</span>':l==="mid"?'<span class="badge memo">보통</span>':'<span class="badge ok">우수</span>'; }
+function reportHtml(R){
+  const sc=x=>x==null?"-":x;
+  const qRow=(x,ans)=>{ const q=qById(x.id); return '<tr><td><b>Q'+x.id+'</b></td><td>'+esc(sumQ(q))+(ans?'<div class="small muted">답변 요약: '+esc(sumA(q))+'</div>':'')
+      +((ans&&(x.lastMemoHeard||x.lastHeard))?'<div class="small" style="color:#475467">내 최근 답변(인식): '+esc(clip(x.lastMemoHeard||x.lastHeard,90))+'</div>':'')
+      +'</td><td>'+x.key+'점<div class="small muted">읽기 '+sc(x.avgRead)+' / 암기 '+sc(x.avgMemo)+'</div></td><td>'+x.n+'회</td><td>'+x.fail+'</td><td>'+lvBadge(x.level)+'</td></tr>'; };
+  const head='<tr><th>번호</th><th>질문 · 답변 요약</th><th>평균</th><th>출제</th><th>미통과</th><th>판정</th></tr>';
+  const P=R.pron, avgAll=avgOf(S.done.map(d=>d.avg));
+  let h='<div class="card"><h2 style="margin-bottom:12px">📊 훈련 리포트</h2><div class="grid3">'
+    +'<div class="stat"><b>'+S.done.length+'/'+total()+'회</b><span class="small muted">진행</span></div>'
+    +'<div class="stat"><b>'+(S.done.length?S.done[S.done.length-1].avg+'점':'-')+'</b><span class="small muted">최근 회차 평균</span></div>'
+    +'<div class="stat"><b>'+R.low.length+'</b><span class="small muted">취약 질문</span></div>'
+    +'<div class="stat"><b>'+R.high.length+'</b><span class="small muted">우수 질문</span></div></div>'
+    +'<p class="small muted" style="margin-top:10px">'+esc(gateText(R.lg))+'</p></div>';
+  h+='<div class="card"><h3 style="margin-bottom:8px">회차별 결과</h3><table><tr><th>회차</th><th>단계</th><th>통과 기준</th><th>통과</th><th>평균</th><th>일시</th></tr>'
+    +S.done.map(d=>'<tr><td>'+d.n+'회</td><td><span class="badge '+d.phase+'">'+stageLabel(d)+'</span></td><td>'+d.passScore+'점</td><td>'+d.passCount+'/'+d.total+'</td><td><b>'+d.avg+'점</b></td><td>'+fmtDT(d.startedAt)+'</td></tr>').join("")+'</table></div>';
+  h+='<div class="card"><h3 style="margin-bottom:4px">🔴 취약 질문 <span class="muted small">(암기 기준 평균 '+LOW_BELOW+'점 미만 · 낮은 순)</span></h3>'
+    +(R.low.length?'<table>'+head+R.low.map(x=>qRow(x,true)).join("")+'</table>':'<p class="muted">해당 없음 🎉</p>')+'</div>';
+  if(R.mid.length) h+='<div class="card"><h3 style="margin-bottom:4px">🟡 보통 질문 <span class="muted small">('+LOW_BELOW+'~'+(HIGH_FROM-1)+'점)</span></h3><table>'+head+R.mid.map(x=>qRow(x,true)).join("")+'</table></div>';
+  h+='<div class="card"><h3 style="margin-bottom:4px">🟢 우수 질문 <span class="muted small">('+HIGH_FROM+'점 이상)</span></h3>'
+    +(R.high.length?'<table>'+head+R.high.map(x=>qRow(x,false)).join("")+'</table>':'<p class="muted">아직 없어요</p>')+'</div>';
+  h+='<div class="card"><h3 style="margin-bottom:4px">🎙 발음·인식 집중 교정 <span class="badge ng" style="margin-left:6px">참고용 · 신뢰도 약 50%</span></h3>'
+    +'<p class="small muted">음성인식 결과를 바탕으로 한 추정이에요. 발음이 맞아도 표시될 수 있으니 실제 발음은 모의면접에서 직접 확인하세요.</p>'
+    +'<b>① 반복해서 인식되지 않은 구절</b>'+(P.phrases.length?'<ul class="diff">'+P.phrases.map(p=>'<li><span class="tag miss">Q'+p.id+'</span>「'+esc(p.text)+'」 <span class="muted small">'+p.n+'회 중 '+p.hits+'회</span></li>').join("")+'</ul>':'<p class="muted small">뚜렷한 반복 구절 없음</p>')
+    +'<b>② 자주 다르게 들린 말</b>'+(P.pairs.length?'<ul class="diff">'+P.pairs.map(p=>'<li><span class="tag sub">'+p.c+'회</span>「'+esc(p.s)+'」 → 「'+esc(p.h)+'」 <span class="muted small">Q'+p.ids.join(', Q')+'</span></li>').join("")+'</ul>':'<p class="muted small">해당 없음</p>')
+    +'<b>③ 인식 신뢰도가 자주 낮았던 질문</b>'+(P.lowQ.length?'<ul class="diff">'+P.lowQ.map(x=>'<li><span class="tag extra">Q'+x.id+'</span>'+esc(sumQ(qById(x.id)))+' <span class="muted small">'+x.n+'회 중 '+x.low+'회</span></li>').join("")+'</ul>':'<p class="muted small">해당 없음</p>')+'</div>';
+  h+='<div class="card"><details><summary>📋 질문별 전체 현황 (질문 요약 · 답변 요약) — 펼치기</summary><table style="margin-top:10px">'+head+R.qs.slice().sort((a,b)=>a.id-b.id).map(x=>qRow(x,true)).join("")+'</table></details></div>';
+  return h;
+}
+function viewComplete(){
+  const R=buildReport(), g=R.lg, fin=R.finished, ok=!!(g&&g.passed);
+  let top;
+  if(fin&&ok) top='<div class="card hero celebrate"><div style="font-size:54px">🎉</div><h1>실전 테스트 준비 완료!</h1><p style="font-size:18px">'+S.done.length+'회 훈련을 모두 끝냈어요. 정말 수고했어요, '+esc(C.student)+'!</p></div>';
+  else if(fin) top='<div class="card hero celebrate"><div style="font-size:48px">📝</div><h1>훈련 완료 — 리포트를 제출하세요</h1><p style="font-size:17px">'+S.done.length+'회 훈련을 모두 마쳤어요. 끝까지 해낸 것만으로 큰 연습이 됐어요, '+esc(C.student)+'!</p></div>'
+    +'<div class="notice" style="margin-bottom:16px">마지막 회차 평균('+g.avg+'점)이 기준('+GATE_SCORE+'점)에는 못 미쳤어요. 하지만 <b>6~10회 재도전까지 마쳤으니</b> 지금까지의 결과를 리포트로 만들었어요. <b>'+esc(C.teacher)+'께 이 리포트를 제출</b>하고, 부족한 질문을 함께 보충한 뒤 모의면접 일정을 잡으세요.</div>';
+  else top='<div class="card hero"><div class="row"><h2 class="grow" style="color:#fff">중간 리포트 (진행 중)</h2><button class="btn" data-act="go-dash">대시보드로</button></div></div>';
+  const msgTitle = fin ? (ok?'📣 '+esc(C.teacher)+'에게 이 화면을 보여 주세요':'📣 '+esc(C.teacher)+'께 리포트를 제출하세요') : '📨 '+esc(C.teacher)+'께 보낼 메시지 (미리보기)';
+  return top
+  +'<div class="card"><h2 style="margin-bottom:10px">'+msgTitle+'</h2>'
+    +(fin&&ok?'<p>이제 <b>'+esc(C.teacher)+'과 직접 일본어로 하는 실전 모의면접</b>을 볼 차례예요. 아래 메시지와 리포트를 보내거나, 이 화면을 그대로 보여 주고 일정을 잡으세요.</p>'
+      :fin?'<p>아래 메시지를 복사해서 보내고, <b>리포트 파일(.txt)</b>을 함께 전달하세요.</p>':'')
+    +'<pre class="rep">'+esc(teacherMsg())+'</pre>'
+    +'<div class="row"><button class="btn primary" data-act="copy-msg">메시지 복사</button><button class="btn" data-act="copy-report">리포트 전체 복사</button><button class="btn" data-act="dl-report">리포트 파일 저장(.txt)</button><span class="muted small">확인코드</span><span class="code" style="font-size:18px">'+doneCode()+'</span></div></div>'
+  +reportHtml(R)
+  +'<div class="row" style="margin:6px 0 20px"><button class="btn" data-act="go-dash">대시보드로</button></div>';
+}
+
+/* ===== 접근코드 (학생별) ===== */
+function gHash(str){ let h1=0xdeadbeef,h2=0x41c6ce57; for(let i=0;i<str.length;i++){ const c=str.charCodeAt(i); h1=Math.imul(h1^c,2654435761); h2=Math.imul(h2^c,1597334677); } h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909); h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909); return (4294967296*(2097151&h2)+(h1>>>0)).toString(16); }
+function gNorm(x){ return String(x||"").toUpperCase().replace(/[^A-Z0-9]/g,""); }
+const GATE_KEY="mensetsuGate:"+C.student+":"+C.school;
+let gateOk = !C.gate; let gateErr="";
+try{ if(C.gate && localStorage.getItem(GATE_KEY)===C.gate.hash) gateOk=true; }catch(e){}
+function viewGate(){
+  return '<div class="card" style="max-width:460px;margin:60px auto"><h2>'+esc(C.student)+' 학생 전용 면접 훈련</h2><p class="muted">선생님께 받은 <b>접근코드</b>를 입력해 주세요.</p>'
+   +'<input id="gate-code" type="text" autocomplete="off" autocapitalize="characters" placeholder="예) K7M2-9QX4" style="width:100%;font-size:20px;letter-spacing:2px;padding:10px;margin-top:8px">'
+   +(gateErr?'<div class="notice" style="margin-top:10px">'+esc(gateErr)+'</div>':'')
+   +'<div class="row" style="margin-top:14px"><button class="btn primary big" data-act="gate-submit">입장</button></div></div>';
+}
+function render(){
+  const app=$("#app");
+  if(!gateOk){ app.innerHTML=viewGate(); return; }
+  app.innerHTML = view==="diag"&&diag?viewDiag() : view==="setup"?viewSetup() : view==="session"&&S.cur?viewSession() : view==="report"?viewReport(reportN) : view==="complete"?viewComplete() : viewDash();
+  window.scrollTo(0,0);
+}
+function syncBtns(){ const b=$("#btn-rec"); if(b) b.disabled=ttsBusy; const l=$("#live"); if(l&&!win&&qs.mode==="ready") l.textContent=ttsBusy?"면접관이 질문하는 중이에요…":"준비되면 녹음 버튼을 누르세요."; }
+
+/* ===== 이벤트 ===== */
+document.addEventListener("change",e=>{ if(e.target.id==="tts"){ ttsOn=e.target.checked; if(!ttsOn) stopSpeak(); } });
+document.addEventListener("change",e=>{ if(e.target&&e.target.id==="f-voice"){ S.profile.voice=e.target.value; save(); } });
+try{ speechSynthesis.onvoiceschanged=()=>{ if(view==="setup"&&!(micTest&&micTest.on)) render(); }; }catch(e){}
+document.addEventListener("keydown",e=>{ if(e.key==="Enter"&&e.target&&e.target.id==="gate-code"){ const b=document.querySelector('[data-act="gate-submit"]'); if(b) b.click(); } });
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-act]"); if(!t) return;
+  const act=t.dataset.act;
+  if(act==="gate-submit"){
+    const v=gNorm(($("#gate-code")||{}).value);
+    if(C.gate && gHash(C.gate.salt+v)===C.gate.hash){ gateOk=true; gateErr=""; try{ localStorage.setItem(GATE_KEY,C.gate.hash); }catch(e){} render(); }
+    else { gateErr="코드가 맞지 않아요. 선생님께 받은 코드를 다시 확인해 주세요."; render(); const i=$("#gate-code"); if(i) i.focus(); }
+    return;
+  }
+  if(act==="start"){ startSession(); }
+  else if(act==="go-dash"){ flowId++; stopSpeak(); disarmMic(); view="dash"; render(); }
+  else if(act==="pause"){ flowId++; stopSpeak(); abortRec(); disarmMic(); view="dash"; render(); }
+  else if(act==="setup"){ view="setup"; render(); }
+  else if(act==="setup-save"){
+    const g=$("#f-grade"), o=$("#f-other");
+    if(g) S.profile.grade=g.value; if(o) S.profile.other=o.value.trim();
+    if(drafts.length){ S.profile.drafts=S.profile.drafts||{}; let bad=0; document.querySelectorAll(".f-draft").forEach(el=>{ const id=+el.dataset.id, v=el.value.trim(), q=qById(id); if(v.length<8){ bad++; return; } if(v===q.a.trim()) delete S.profile.drafts[id]; else S.profile.drafts[id]=v; }); if(bad){ setupErr="고쳐 쓰는 답변 칸이 비어 있어요. (8자 이상)"; render(); return; } S.profile.draftOk=true; }
+    if(!setupOk()){ setupErr="빠진 항목이 있어요. ("+(needsGrade?"학년 선택 / ":"")+"직접 쓰는 답변(Q"+((C.questions.find(q=>q.type==="custom")||{}).id||"")+")은 8자 이상)"; render(); return; }
+    setupErr=""; save(); view="dash"; render();
+  }
+  else if(act==="diag"){ unlockAudio(); runDiag(); }
+  else if(act==="diag-back"){ view=(prevView==="session"&&S.cur)?"session":"dash"; render(); }
+  else if(act==="voice-test"){ unlockAudio(); const f=$("#f-voice"); if(f){ S.profile.voice=f.value; save(); } speakAsync("こんにちは。面接を始めます。まず、自己紹介をお願いします。"); }
+  else if(act==="mic-reset"){
+    if(["ask","prep","beep","rec"].includes(qs.mode)){ flowId++; stopSpeak(); abortRec(); qs.mode="ready"; qs.err=""; }
+    micNote="마이크를 다시 연결하는 중… (허용 창이 뜨면 '허용')"; render();
+    reopenMic().then(ok=>{ micNote= ok ? "✔ 마이크를 다시 인식했어요: "+(micName||"기본 마이크")+" — 말해 보면 오른쪽 막대가 움직여요. 준비되면 ▶를 누르세요." : micAdvice(lastMicErr&&lastMicErr.name); render(); });
+  }
+  else if(act==="mic-test"){
+    if(micTest&&micTest.on){ stopRec(); return; }
+    micTest={on:true,text:"준비 중… (허용 창이 뜨면 '허용')"}; render();
+    armMic().then(async ok=>{
+      if(!ok){ micTest={on:false,text:micAdvice(lastMicErr&&lastMicErr.name)}; render(); return; }
+      const live=await freshEngine();
+      if(!live){ micTest={on:false,text:engErr||micAdvice('network')}; disarmMic(); render(); return; }
+      micTest={on:true,text:"삐 소리 뒤에 말해 보세요 (6초)"}; render();
+      await beep();
+      startRec(r=>{ micTest={on:false,text:r.err||(r.text?"✔ 인식 결과: "+r.text:"소리가 인식되지 않았어요. 마이크 음량을 확인해 주세요.")}; disarmMic(); render(); },{autoStop:false});
+      setTimeout(()=>stopRec(),6000);
+    });
+  }
+  else if(act==="greet-next"){ stopSpeak(); S.cur.greeted=true; save(); qs=freshQs(); render(); if(S.cur.phase==="memo") askAndRecord(curQ()); }
+  else if(act==="replay"){ speakAsync(C.greeting); }
+  else if(act==="replay-q"){ speakAsync(curQ().q); }
+  else if(act==="play"){ askAndRecord(curQ()); }
+  else if(act==="replay-mid"){
+    if(qs.replays<1){ qs.replays++; flowId++; abortRec(); stopSpeak(); askAndRecord(curQ()); }
+  }
+  else if(act==="rec-stop"){ stopRec(); const l=$("#live"); if(l) l.textContent="처리 중…"; }
+  else if(act==="type-submit"){
+    const v=($("#typed")||{}).value||""; qs.typed=true;
+    onAnswer(curQ(),{text:v.trim(),low:[],dur:Math.max(5,v.length/4),err:""});
+  }
+  else if(act==="retry"){ qs={...freshQs(),typed:qs.typed}; askAndRecord(curQ(),{tts:false}); }
+  else if(act==="next"){ nextQuestion(); }
+  else if(act==="open-report"){ reportN=+t.dataset.n; view="report"; render(); }
+  else if(act==="open-complete"){ view="complete"; render(); }
+  else if(act==="copy-msg"){ copy(teacherMsg(), t); }
+  else if(act==="copy-report"){ copy(reportText(), t); }
+  else if(act==="dl-report"){ download("면접훈련리포트_"+C.student+".txt", reportText()); }
+  else if(act==="reset-ask"){ resetAsk=true; render(); }
+  else if(act==="reset-no"){ resetAsk=false; render(); }
+  else if(act==="reset-do"){ S={profile:S.profile,done:[],cur:null,extra:0}; save(); resetAsk=false; render(); }
+});
+if("speechSynthesis" in window) speechSynthesis.getVoices();
+view = "dash";
+render();
+</script>
+</body>
+</html>
